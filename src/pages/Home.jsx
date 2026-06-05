@@ -6,19 +6,13 @@ import {
   Search,
   MapPin,
   Network,
-  Boxes
+  Boxes,
+  BookOpenIcon,
+  NotebookIcon
+  
 } from 'lucide-react';
 
-const GitHubIcon = ({ className = 'w-5 h-5' }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    aria-hidden="true"
-    className={className}
-  >
-    <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.54 2.87 8.39 6.84 9.75.5.09.66-.22.66-.48 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.38-3.37-1.38-.46-1.2-1.12-1.52-1.12-1.52-.91-.64.07-.63.07-.63 1.01.08 1.54 1.06 1.54 1.06.9 1.58 2.35 1.12 2.92.85.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.13-4.56-5.03 0-1.11.38-2.02 1.01-2.74-.1-.26-.44-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.2 9.2 0 0 1 12 7.15c.85 0 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.54 1.41.2 2.45.1 2.71.63.72 1 1.63 1 2.74 0 3.91-2.34 4.77-4.57 5.02.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.16.59.67.48A10.28 10.28 0 0 0 22 12.26C22 6.58 17.52 2 12 2z" />
-  </svg>
-);
+import GitHubIcon from '../components/GitHubIcon';
 
 const Home = () => {
   const categories = [
@@ -80,8 +74,8 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-16">
+    <div className="min-h-screen flex flex-col">
+      <div className="container mx-auto px-4 py-16 flex-1">
 
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -103,7 +97,7 @@ const Home = () => {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
             >
-              <GitHubIcon />
+              <GitHubIcon className="w-5 h-5" />
               <span>CS-Fundamentals</span>
             </a>
 
@@ -113,7 +107,7 @@ const Home = () => {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
             >
-              <GitHubIcon />
+              <GitHubIcon className="w-5 h-5" />
               <span>CP Notes</span>
             </a>
           </div>
@@ -230,18 +224,94 @@ const Home = () => {
               </h3>
 
               <p className="text-gray-400">
-                Modern UI, smooth transitions and engaging visuals.
+                Beautiful UI and clear visuals.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="mt-20 text-center text-gray-500 text-sm">
-          <p>Built with React, TailwindCSS and ❤️ by Manish Kumar Sah</p>
-        </footer>
       </div>
+      {/* Footer */}
+        <footer className="w-screen relative left-1/2 right-1/2 -mx-[50vw] bg-slate-950 border-t border-slate-800 px-8 py-12 mt-16">
+  <div className="max-w-5xl mx-auto">
+
+    {/* Top Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-10">
+
+      {/* Brand Column */}
+      <div>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center text-indigo-400 font-semibold text-[12px] tracking-wide">
+            AV
+          </div>
+          <span className="text-[15px] font-medium text-slate-100">Algorithm Visualizer</span>
+        </div>
+        <p className="text-[13px] text-slate-500 leading-relaxed mb-4">
+          An interactive platform to explore sorting, searching, graph, and pathfinding algorithms — step by step, visually.
+        </p>
+        <div className="flex gap-2">
+          <span className="text-[11px] px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-indigo-400">
+            Open Source
+          </span>
+          <span className="text-[11px] px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-slate-400">
+            v1.0
+          </span>
+        </div>
+      </div>
+
+      {/* Resources Column */}
+      <div>
+        <p className="text-[11px] font-medium text-slate-600 uppercase tracking-widest mb-4">Resources</p>
+        <div className="flex flex-col gap-3">
+          <a href="https://github.com/manishkumar8312/CS-Fundamentals" target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 text-[13px] text-slate-400 no-underline hover:text-indigo-400 transition-colors">
+            <BookOpenIcon className="w-4 h-4 text-indigo-500" />
+            CS Fundamentals
+          </a>
+          <a href="https://github.com/manishkumar8312/cp-notes" target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 text-[13px] text-slate-400 no-underline hover:text-indigo-400 transition-colors">
+            <NotebookIcon className="w-4 h-4 text-indigo-500" />
+            CP Notes
+          </a>
+          <a href="https://github.com/manishkumar8312" target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 text-[13px] text-slate-400 no-underline hover:text-indigo-400 transition-colors">
+            <GitHubIcon className="w-4 h-4 text-indigo-500" />
+            GitHub Profile
+          </a>
+        </div>
+      </div>
+
+      {/* Topics Column */}
+      <div>
+        <p className="text-[11px] font-medium text-slate-600 uppercase tracking-widest mb-4">Topics Covered</p>
+        <div className="flex flex-wrap gap-2">
+          {["Sorting", "Searching", "Graphs", "Pathfinding", "Trees", "DP"].map(tag => (
+            <span key={tag} className="text-[11px] px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-500">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
     </div>
+
+    {/* Bottom Bar */}
+    <div className="border-t border-slate-800 pt-5 flex flex-wrap items-center justify-between gap-3">
+      <p className="text-[12px] text-slate-600 m-0">
+        Built by{" "}
+        <a href="https://github.com/manishkumar8312" target="_blank" rel="noopener noreferrer"
+          className="text-indigo-500 no-underline hover:text-indigo-400 transition-colors">
+          Manish Kumar
+        </a>{" "}
+        · Made for learners and competitive programmers
+      </p>
+      <p className="text-[12px] text-slate-600 m-0">© 2025 Algorithm Visualizer</p>
+    </div>
+
+  </div>
+</footer>
+    </div>
+    
   );
 };
 
