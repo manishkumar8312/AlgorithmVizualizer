@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# AlgorithmVizualizer
-=======
 # Algorithm Visualizer
 
 A modern, interactive algorithm visualizer built with React and TailwindCSS.
@@ -40,4 +37,3 @@ npm run build
 - TailwindCSS
 - Lucide Icons
 - Vite
->>>>>>> b5d56c3 (Initial commit)
