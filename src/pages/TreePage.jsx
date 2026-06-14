@@ -2,21 +2,16 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import GlassCard from '../components/GlassCard';
-import SortingVisualizer from '../components/SortingVisualizer';
-import { bubbleSort, bubbleSortInfo } from '../algorithms/sorting/bubbleSort';
-import { selectionSort, selectionSortInfo } from '../algorithms/sorting/selectionSort';
-import { insertionSort, insertionSortInfo } from '../algorithms/sorting/insertionSort';
-import { mergeSort, mergeSortInfo } from '../algorithms/sorting/mergeSort';
-import { quickSort, quickSortInfo } from '../algorithms/sorting/quickSort';
+import TreeVisualizer from '../components/TreeVisualizer';
+import { preOrderTraversal, inOrderTraversal, postOrderTraversal, levelOrderTraversal } from '../algorithms/trees/traversals';
 import { algorithmDatabase } from '../data/algorithmData';
 
-const SortingPage = () => {
+const TreePage = () => {
   const algorithms = [
-    { name: 'Bubble Sort', algorithm: bubbleSort, info: algorithmDatabase.sorting.bubbleSort },
-    { name: 'Selection Sort', algorithm: selectionSort, info: algorithmDatabase.sorting.selectionSort },
-    { name: 'Insertion Sort', algorithm: insertionSort, info: algorithmDatabase.sorting.insertionSort },
-    { name: 'Merge Sort', algorithm: mergeSort, info: algorithmDatabase.sorting.mergeSort },
-    { name: 'Quick Sort', algorithm: quickSort, info: algorithmDatabase.sorting.quickSort },
+    { name: 'Pre-order Traversal', algorithm: preOrderTraversal, info: algorithmDatabase.trees.preOrder },
+    { name: 'In-order Traversal', algorithm: inOrderTraversal, info: algorithmDatabase.trees.inOrder },
+    { name: 'Post-order Traversal', algorithm: postOrderTraversal, info: algorithmDatabase.trees.postOrder },
+    { name: 'Level-order Traversal', algorithm: levelOrderTraversal, info: algorithmDatabase.trees.levelOrder },
   ];
 
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[0]);
@@ -26,11 +21,11 @@ const SortingPage = () => {
       {/* Header */}
       <div className="page-header">
         <div className="container mx-auto flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors duration-300">
+          <Link to="/" className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition-colors duration-300">
             <ArrowLeft size={20} />
             <span className="font-semibold">Back to Home</span>
           </Link>
-          <h1 className="text-2xl font-bold text-white">Sorting Algorithms</h1>
+          <h1 className="text-2xl font-bold text-white">Tree Algorithms</h1>
           <div className="w-32"></div>
         </div>
       </div>
@@ -55,7 +50,7 @@ const SortingPage = () => {
       {/* Visualizer */}
       <div className="container mx-auto p-4 h-[calc(100vh-180px)]">
         <GlassCard className="h-full overflow-hidden">
-          <SortingVisualizer
+          <TreeVisualizer
             algorithm={selectedAlgorithm.algorithm}
             algorithmInfo={selectedAlgorithm.info}
           />
@@ -65,4 +60,4 @@ const SortingPage = () => {
   );
 };
 
-export default SortingPage;
+export default TreePage;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import GlassCard from '../components/GlassCard';
 import GraphVisualizer from '../components/GraphVisualizer';
 import RecursionVisualizer from '../components/RecursionVisualizer';
 import { kruskal, kruskalInfo } from '../algorithms/graph/kruskal';
@@ -14,9 +15,14 @@ const GraphPage = () => {
     {
       name: 'Graph Algorithms',
       algorithms: [
-        { name: "Kruskal's MST", algorithm: kruskal, info: kruskalInfo, type: 'graph' },
-        { name: "Prim's MST", algorithm: prim, info: primInfo, type: 'graph' },
-        { name: 'Topological Sort', algorithm: topologicalSort, info: topologicalSortInfo, type: 'graph' },
+        { name: 'BFS', type: 'graph', info: { name: 'BFS' } },
+        { name: 'DFS', type: 'graph', info: { name: 'DFS' } },
+        { name: 'Dijkstra', type: 'graph', info: { name: 'Dijkstra' } },
+        { name: 'Bellman-Ford', type: 'graph', info: { name: 'Bellman-Ford' } },
+        { name: 'Floyd-Warshall', type: 'graph', info: { name: 'Floyd-Warshall' } },
+        { name: "Prim's MST", type: 'graph', info: { name: "Prim's MST" } },
+        { name: "Kruskal's MST", type: 'graph', info: { name: "Kruskal's MST" } },
+        { name: 'Topological Sort', type: 'graph', info: { name: 'Topological Sort' } },
       ]
     },
     {
@@ -32,44 +38,33 @@ const GraphPage = () => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(allAlgorithms[0]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen page-fade-in">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4">
+      <div className="page-header">
         <div className="container mx-auto flex items-center justify-between">
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-white hover:text-purple-400 transition-colors"
-          >
+          <Link to="/" className="flex items-center gap-2 text-gray-300 hover:text-purple-400 transition-colors duration-300">
             <ArrowLeft size={20} />
             <span className="font-semibold">Back to Home</span>
           </Link>
-          
           <h1 className="text-2xl font-bold text-white">Graph & Recursion Algorithms</h1>
-          
           <div className="w-32"></div>
         </div>
       </div>
 
       {/* Algorithm Selector */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4">
+      <div className="page-header" style={{ borderTop: 'none' }}>
         <div className="container mx-auto space-y-3">
           {categories.map((category, catIndex) => (
             <div key={catIndex}>
               <h3 className="text-sm font-semibold text-gray-400 mb-2 text-center">
                 {category.name}
               </h3>
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="flex flex-wrap gap-3 justify-center">
                 {category.algorithms.map((algo, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedAlgorithm(algo)}
-                    className={`px-4 py-2 rounded-lg font-semibold transition-all ${
-                      selectedAlgorithm.name === algo.name
-                        ? category.name.includes('Graph')
-                          ? 'bg-purple-600 text-white shadow-lg scale-105'
-                          : 'bg-orange-600 text-white shadow-lg scale-105'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                    }`}
+                    className={selectedAlgorithm.name === algo.name ? 'glass-btn-active' : 'glass-btn'}
                   >
                     {algo.name}
                   </button>
@@ -82,7 +77,7 @@ const GraphPage = () => {
 
       {/* Visualizer */}
       <div className="container mx-auto p-4 h-[calc(100vh-220px)] min-h-[650px]">
-        <div className="bg-gray-800 rounded-lg shadow-2xl h-full overflow-hidden">
+        <GlassCard className="h-full overflow-hidden">
           {selectedAlgorithm.type === 'graph' ? (
             <GraphVisualizer
               algorithm={selectedAlgorithm.algorithm}
@@ -95,7 +90,7 @@ const GraphPage = () => {
               type={selectedAlgorithm.type}
             />
           )}
-        </div>
+        </GlassCard>
       </div>
     </div>
   );

@@ -8,8 +8,16 @@ import {
   Network,
   Boxes,
   BookOpenIcon,
-  NotebookIcon
-  
+  NotebookIcon,
+  Trees,
+  Eye,
+  Sliders,
+  Code2,
+  Activity,
+  Lightbulb,
+  Database,
+  RotateCcw,
+  BookOpen
 } from 'lucide-react';
 
 import GitHubIcon from '../components/GitHubIcon';
@@ -70,8 +78,16 @@ const Home = () => {
       path: '/recursion',
       color: 'from-orange-500 to-red-600',
       algorithms: ['Tower of Hanoi', 'N-Queens']
-    }
-  ];
+    },
+    {
+      title: 'Tree Algorithms',
+      description: 'Explore binary trees, BSTs, AVL trees, heaps, tries, and segment trees with interactive visualizations.',
+      icon: <Trees className="w-12 h-12" />, 
+      path: '/trees',
+      color: 'from-green-500 to-teal-600',
+      algorithms: ['Binary Tree Traversals', 'BST Operations', 'AVL Rotations', 'Heap Operations', 'Trie Visualization', 'Segment Tree Queries']
+    },
+    ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -120,7 +136,7 @@ const Home = () => {
             </div>
 
             <div>
-              <h3 className="text-3xl font-bold text-purple-400">5</h3>
+              <h3 className="text-3xl font-bold text-purple-400">6</h3>
               <p className="text-gray-400">Categories</p>
             </div>
 
@@ -185,48 +201,95 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Features */}
-        <div className="mt-24 max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-10">
-            Why Use This Visualizer?
-          </h2>
+        {/* Powerful Features Section */}
+        <div className="mt-32 max-w-6xl mx-auto relative px-4">
+          
+          {/* Subtle Background Glow */}
+          <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-[400px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gray-800/90 rounded-xl p-6 text-center hover:-translate-y-1 transition-transform">
-              <div className="text-4xl mb-3">🎯</div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl tracking-tight font-bold text-slate-100 mb-3">
+              Powerful Features
+            </h2>
+            <p className="text-[15px] text-slate-400 max-w-xl mx-auto leading-relaxed">
+              Everything you need to deeply understand complex algorithms through interactive, visual learning.
+            </p>
+          </div>
 
-              <h3 className="text-xl font-bold text-white mb-2">
-                Interactive
-              </h3>
-
-              <p className="text-gray-400">
-                Control speed, input size and visualize every step.
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* Feature 1 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <Eye className="w-5 h-5 text-slate-500 mb-4 group-hover:text-blue-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Step-by-Step Vis</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                Watch algorithms execute line-by-line. Follow the flow of data intuitively as it transforms at each step.
               </p>
             </div>
 
-            <div className="bg-gray-800/90 rounded-xl p-6 text-center hover:-translate-y-1 transition-transform">
-              <div className="text-4xl mb-3">📚</div>
-
-              <h3 className="text-xl font-bold text-white mb-2">
-                Educational
-              </h3>
-
-              <p className="text-gray-400">
-                Understand time and space complexity with ease.
+            {/* Feature 2 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <Sliders className="w-5 h-5 text-slate-500 mb-4 group-hover:text-purple-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Interactive Controls</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                Take the wheel. Adjust animation speeds, pause, play, and step forward or backward to learn at your pace.
               </p>
             </div>
 
-            <div className="bg-gray-800/90 rounded-xl p-6 text-center hover:-translate-y-1 transition-transform">
-              <div className="text-4xl mb-3">🎨</div>
-
-              <h3 className="text-xl font-bold text-white mb-2">
-                Beautiful
-              </h3>
-
-              <p className="text-gray-400">
-                Beautiful UI and clear visuals.
+            {/* Feature 3 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <Code2 className="w-5 h-5 text-slate-500 mb-4 group-hover:text-cyan-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Code View</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                Connect visuals to code. See the exact lines of code executing in real-time alongside the visualization.
               </p>
             </div>
+
+            {/* Feature 4 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <Activity className="w-5 h-5 text-slate-500 mb-4 group-hover:text-pink-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Complexity Analysis</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                Master the math. Instantly view Time and Space Big-O complexities for every algorithm you explore.
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <BookOpen className="w-5 h-5 text-slate-500 mb-4 group-hover:text-amber-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Detailed Explanations</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                Read clear, jargon-free breakdowns of how algorithms work, their base cases, and logical invariants.
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <Lightbulb className="w-5 h-5 text-slate-500 mb-4 group-hover:text-emerald-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Real Examples</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                Input custom data arrays, graph nodes, or grid sizes to see how algorithms handle your specific edge cases.
+              </p>
+            </div>
+
+            {/* Feature 7 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <Database className="w-5 h-5 text-slate-500 mb-4 group-hover:text-indigo-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Multiple DS Support</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                From simple arrays to complex AVL trees, Tries, and dynamic graphs—visualize a wide array of structures.
+              </p>
+            </div>
+
+            {/* Feature 8 */}
+            <div className="group bg-[#0a0a0a] border border-white/[0.08] rounded-xl p-5 hover:border-white/[0.15] hover:bg-[#111111] transition-colors duration-300">
+              <RotateCcw className="w-5 h-5 text-slate-500 mb-4 group-hover:text-rose-400 transition-colors" />
+              <h3 className="text-[15px] font-semibold text-slate-200 mb-1.5">Undo & Reset</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed">
+                Made a mistake? No problem. Instantly reset states or backtrack to re-evaluate how an algorithm recovers.
+              </p>
+            </div>
+
           </div>
         </div>
 
