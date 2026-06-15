@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Play, Pause, RotateCcw, FastForward, Settings, MessageSquare, List } from 'lucide-react';
+import { Play, Pause, RotateCcw, FastForward, Settings, MessageSquare, List, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { SPEED_PRESETS } from '../utils/animationHelpers';
 import {
   runFactorialTrace,
@@ -22,10 +23,15 @@ function computeTreeLayout(trace, svgWidth = 1100, svgHeight = 500) {
 
   const nodeMap = new Map();
   const rootNodes = [];
+  let maxNodeWidth = 80;
 
   trace.forEach(step => {
     if (step.type === 'CALL') {
       if (!nodeMap.has(step.nodeId)) {
+        const argLength = step.callArgs ? step.callArgs.length : 10;
+        const nodeW = Math.max(80, argLength * 8 + 20);
+        if (nodeW > maxNodeWidth) maxNodeWidth = nodeW;
+
         const newNode = {
           id: step.nodeId,
           parentId: step.parentId,
@@ -34,7 +40,8 @@ function computeTreeLayout(trace, svgWidth = 1100, svgHeight = 500) {
           children: [],
           x: 0,
           y: 0,
-          leafWidth: 0
+          leafWidth: 0,
+          nodeWidth: nodeW
         };
         nodeMap.set(step.nodeId, newNode);
 
@@ -69,17 +76,15 @@ function computeTreeLayout(trace, svgWidth = 1100, svgHeight = 500) {
   const padY = 60;
   const padX = 60;
   const yGap = 90;
-  const leafSpacing = 120; // Need wider spacing for strings like "fib(4)"
+  const leafSpacing = Math.max(120, maxNodeWidth + 40); // Need wider spacing for dynamic node width
 
-  const totalLeaves = rootNodes.reduce((acc, n) => acc + n.leafWidth, 0);
-  const treeWidth = (totalLeaves > 0 ? totalLeaves - 1 : 0) * leafSpacing;
-  
-  const finalWidth = Math.max(800, treeWidth + padX * 2);
-  const finalHeight = Math.max(460, maxDepth * yGap + padY * 2);
-
-  const startX = (finalWidth - treeWidth) / 2;
   const nodes = [];
   const edges = [];
+
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
 
   function assignCoords(node, currentX) {
     node.y = padY + node.depth * yGap;
@@ -88,6 +93,12 @@ function computeTreeLayout(trace, svgWidth = 1100, svgHeight = 500) {
     const allocatedW = node.leafWidth * leafSpacing;
     node.x = currentX + (node.leafWidth === 1 ? 0 : (allocatedW - leafSpacing) / 2);
     
+    const halfW = node.nodeWidth / 2;
+    minX = Math.min(minX, node.x - halfW - 20); // 20px extra padding for glow/shadow
+    maxX = Math.max(maxX, node.x + halfW + 20);
+    minY = Math.min(minY, node.y - 30);
+    maxY = Math.max(maxY, node.y + 30);
+
     nodes.push(node);
 
     let childX = currentX;
@@ -98,11 +109,23 @@ function computeTreeLayout(trace, svgWidth = 1100, svgHeight = 500) {
     });
   }
 
-  let currX = startX;
+  let currX = 0;
   rootNodes.forEach(root => {
     assignCoords(root, currX);
     currX += root.leafWidth * leafSpacing;
   });
+
+  let finalWidth = 800;
+  let finalHeight = 460;
+
+  if (nodes.length > 0) {
+    const treeActualWidth = maxX - minX;
+    finalWidth = Math.max(800, treeActualWidth + padX * 2);
+    finalHeight = Math.max(460, maxY + padY);
+
+    const shiftX = (finalWidth - treeActualWidth) / 2 - minX;
+    nodes.forEach(n => { n.x += shiftX; });
+  }
 
   return { nodes, edges, finalWidth, finalHeight };
 }
@@ -124,14 +147,11 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
   
   // UI Panels
   const [showSettings, setShowSettings] = useState(false);
-  const [showStack, setShowStack] = useState(true);
 
   // Derived state for the current step
   const currentStep = currentStepIndex >= 0 && currentStepIndex < trace.length ? trace[currentStepIndex] : null;
 
   // Refs for auto-scroll and animation
-  const stackEndRef = useRef(null);
-  const logEndRef = useRef(null);
   const timerRef = useRef(null);
 
   // Update default input based on algorithm
@@ -152,12 +172,6 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
   useEffect(() => {
     return () => clearInterval(timerRef.current);
   }, []);
-
-  // Auto-scroll logic
-  useEffect(() => {
-    stackEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [currentStepIndex]);
 
   // Playback Loop
   useEffect(() => {
@@ -355,14 +369,6 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
           <Settings size={14} /> Speed
         </button>
 
-        <button
-          onClick={() => setShowStack(!showStack)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm ${
-            showStack ? 'bg-violet-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-          }`}
-        >
-          <List size={14} /> Call Stack
-        </button>
       </div>
 
       {/* Speed settings */}
@@ -389,14 +395,35 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
       <div className="flex-1 flex overflow-hidden">
         
         {/* SVG Tree View */}
-        <div className="flex-1 overflow-auto bg-gray-950 relative p-4 custom-scrollbar">
+        <div className="flex-1 bg-gray-950 relative overflow-hidden">
           {trace.length === 0 ? (
             <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-lg font-medium select-none">
               Click <span className="text-violet-400 mx-1">Run</span> to trace recursion tree
             </div>
           ) : (
-            <div style={{ minWidth: treeLayout.finalWidth, minHeight: treeLayout.finalHeight }} className="flex items-center justify-center">
-              <svg viewBox={`0 0 ${treeLayout.finalWidth} ${treeLayout.finalHeight}`} preserveAspectRatio="xMidYMid meet" className="w-full h-full">
+            <TransformWrapper
+              initialScale={1}
+              minScale={0.1}
+              maxScale={4}
+              centerOnInit={true}
+              wheel={{ step: 0.1 }}
+            >
+              {({ zoomIn, zoomOut, resetTransform }) => (
+                <>
+                  <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
+                    <button onClick={() => zoomIn()} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded shadow border border-gray-700 transition-colors" title="Zoom In">
+                      <ZoomIn size={18} />
+                    </button>
+                    <button onClick={() => zoomOut()} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded shadow border border-gray-700 transition-colors" title="Zoom Out">
+                      <ZoomOut size={18} />
+                    </button>
+                    <button onClick={() => resetTransform()} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded shadow border border-gray-700 transition-colors" title="Reset View">
+                      <Maximize size={18} />
+                    </button>
+                  </div>
+                  <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+                    <div style={{ width: treeLayout.finalWidth, height: treeLayout.finalHeight }}>
+                      <svg viewBox={`0 0 ${treeLayout.finalWidth} ${treeLayout.finalHeight}`} preserveAspectRatio="xMidYMid meet" className="w-full h-full">
                 <defs>
                   <filter id="rec-shadow" x="-30%" y="-30%" width="160%" height="160%">
                     <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.4" />
@@ -477,9 +504,9 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
                     >
                       {/* Glow ring */}
                       <rect
-                        x={node.x - 45}
+                        x={node.x - (node.nodeWidth / 2) - 5}
                         y={node.y - 25}
-                        width={90}
+                        width={node.nodeWidth + 10}
                         height={50}
                         rx={10}
                         fill="none"
@@ -491,9 +518,9 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
 
                       {/* Main shape */}
                       <rect
-                        x={node.x - 40}
+                        x={node.x - (node.nodeWidth / 2)}
                         y={node.y - 20}
-                        width={80}
+                        width={node.nodeWidth}
                         height={40}
                         rx={8}
                         fill={`url(#${gradId})`}
@@ -520,7 +547,7 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
 
                       {/* Return Value badge */}
                       {retVal && (
-                        <g transform={`translate(${node.x + 30}, ${node.y - 15})`}>
+                        <g transform={`translate(${node.x + (node.nodeWidth / 2) - 10}, ${node.y - 15})`}>
                           <circle cx={0} cy={0} r={12} fill="#1e293b" stroke="#10b981" strokeWidth={1.5} />
                           <text x={0} y={0} textAnchor="middle" dy=".3em" fill="#10b981" fontSize="10" fontWeight="bold">
                             {retVal === 'null' ? '∅' : retVal.substring(0, 3)}
@@ -531,70 +558,15 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
                   );
                 })}
               </svg>
-            </div>
+                    </div>
+                  </TransformComponent>
+                </>
+              )}
+            </TransformWrapper>
           )}
         </div>
 
-        {/* Right Side: Call Stack & Logs */}
-        {showStack && (
-          <div className="w-80 flex flex-col bg-gray-900 border-l border-gray-700">
-            {/* Call Stack */}
-            <div className="flex-1 flex flex-col border-b border-gray-700 min-h-0">
-              <div className="px-4 py-2 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-                <List size={16} className="text-violet-400" />
-                <span className="text-white font-semibold text-sm">Call Stack</span>
-              </div>
-              <div className="flex-1 overflow-y-auto p-3 flex flex-col justify-end space-y-1 bg-gray-900 custom-scrollbar">
-                {(!currentStep || currentStep.stack.length === 0) ? (
-                   <p className="text-gray-500 text-xs text-center pb-4">Stack is empty</p>
-                ) : (
-                  currentStep.stack.map((call, idx) => {
-                    const isTop = idx === currentStep.stack.length - 1;
-                    return (
-                      <div 
-                        key={idx}
-                        className={`px-3 py-2 rounded font-mono text-xs border-l-4 ${
-                          isTop 
-                            ? 'bg-violet-900/40 border-violet-500 text-violet-100 shadow-sm transform scale-100' 
-                            : 'bg-gray-800 border-gray-600 text-gray-400 opacity-75'
-                        } transition-all duration-300`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span>{call}</span>
-                          {isTop && <span className="text-[10px] text-violet-300">TOP</span>}
-                        </div>
-                      </div>
-                    )
-                  })
-                )}
-                <div ref={stackEndRef} />
-              </div>
-            </div>
-
-            {/* Event Log */}
-            <div className="h-1/3 flex flex-col min-h-0">
-              <div className="px-4 py-2 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-                <MessageSquare size={16} className="text-fuchsia-400" />
-                <span className="text-white font-semibold text-sm">Execution Log</span>
-              </div>
-              <div className="flex-1 overflow-y-auto p-3 space-y-1.5 text-xs font-mono custom-scrollbar">
-                {currentStepIndex < 0 ? (
-                  <p className="text-gray-500 text-center mt-2">Waiting to run...</p>
-                ) : (
-                  trace.slice(0, currentStepIndex + 1).map((step, i) => (
-                    <div key={i} className={`flex gap-2 ${logColor(step.type)}`}>
-                      <span className="shrink-0 font-bold opacity-75">
-                        {step.type === 'CALL' ? '→' : step.type === 'BACKTRACK' ? '↺' : step.type === 'SUCCESS' ? '✓' : '←'}
-                      </span>
-                      <span className="leading-relaxed">{step.message}</span>
-                    </div>
-                  ))
-                )}
-                <div ref={logEndRef} />
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Right Side: Call Stack & Logs (Removed) */}
       </div>
 
       {/* Legend */}

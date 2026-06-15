@@ -25,14 +25,11 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
   
   // UI Panels
   const [showSettings, setShowSettings] = useState(false);
-  const [showStack, setShowStack] = useState(true);
 
   // Derived state for the current step
   const currentStep = currentStepIndex >= 0 && currentStepIndex < trace.length ? trace[currentStepIndex] : null;
 
   // Refs for auto-scroll and animation
-  const stackEndRef = useRef(null);
-  const logEndRef = useRef(null);
   const timerRef = useRef(null);
 
   // Default initial boards
@@ -71,12 +68,6 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
   useEffect(() => {
     return () => clearInterval(timerRef.current);
   }, []);
-
-  // Auto-scroll logic
-  useEffect(() => {
-    stackEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [currentStepIndex]);
 
   // Playback Loop
   useEffect(() => {
@@ -297,14 +288,6 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
           <Settings size={14} /> Speed
         </button>
 
-        <button
-          onClick={() => setShowStack(!showStack)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm ${
-            showStack ? 'bg-violet-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-          }`}
-        >
-          <List size={14} /> Call Stack
-        </button>
       </div>
 
       {/* Speed settings */}
@@ -341,66 +324,7 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
           )}
         </div>
 
-        {/* Right Side: Call Stack & Logs */}
-        {showStack && (
-          <div className="w-80 flex flex-col bg-gray-900 border-l border-gray-700">
-            {/* Call Stack */}
-            <div className="flex-1 flex flex-col border-b border-gray-700 min-h-0">
-              <div className="px-4 py-2 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-                <List size={16} className="text-violet-400" />
-                <span className="text-white font-semibold text-sm">Call Stack</span>
-              </div>
-              <div className="flex-1 overflow-y-auto p-3 flex flex-col justify-end space-y-1 bg-gray-900 custom-scrollbar">
-                {(!currentStep || currentStep.stack.length === 0) ? (
-                   <p className="text-gray-500 text-xs text-center pb-4">Stack is empty</p>
-                ) : (
-                  currentStep.stack.map((call, idx) => {
-                    const isTop = idx === currentStep.stack.length - 1;
-                    return (
-                      <div 
-                        key={idx}
-                        className={`px-3 py-2 rounded font-mono text-xs border-l-4 ${
-                          isTop 
-                            ? 'bg-violet-900/40 border-violet-500 text-violet-100 shadow-sm transform scale-100' 
-                            : 'bg-gray-800 border-gray-600 text-gray-400 opacity-75'
-                        } transition-all duration-300`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span>{call}</span>
-                          {isTop && <span className="text-[10px] text-violet-300">TOP</span>}
-                        </div>
-                      </div>
-                    )
-                  })
-                )}
-                <div ref={stackEndRef} />
-              </div>
-            </div>
-
-            {/* Event Log */}
-            <div className="h-1/3 flex flex-col min-h-0">
-              <div className="px-4 py-2 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-                <MessageSquare size={16} className="text-fuchsia-400" />
-                <span className="text-white font-semibold text-sm">Execution Log</span>
-              </div>
-              <div className="flex-1 overflow-y-auto p-3 space-y-1.5 text-xs font-mono custom-scrollbar">
-                {currentStepIndex < 0 ? (
-                  <p className="text-gray-500 text-center mt-2">Waiting to run...</p>
-                ) : (
-                  trace.slice(0, currentStepIndex + 1).map((step, i) => (
-                    <div key={i} className={`flex gap-2 ${logColor(step.type)}`}>
-                      <span className="shrink-0 font-bold opacity-75">
-                        {step.type === 'PLACE' ? '→' : step.type === 'BACKTRACK' ? '↺' : step.type === 'SUCCESS' ? '✓' : step.type === 'INVALID' ? '✕' : '•'}
-                      </span>
-                      <span className="leading-relaxed">{step.message}</span>
-                    </div>
-                  ))
-                )}
-                <div ref={logEndRef} />
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Right Side: Call Stack & Logs (Removed) */}
       </div>
     </div>
   );
