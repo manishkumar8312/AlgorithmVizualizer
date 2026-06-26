@@ -130,10 +130,10 @@ const TowerOfHanoiVisualizer = ({ algorithmId }) => {
     return (
       <div className="flex flex-col items-center justify-end relative mx-4" style={{ height: `${pegHeight}px`, width: '120px' }}>
         {/* The Peg (Pole) */}
-        <div className="absolute bottom-0 w-3 bg-gray-600 rounded-t-full shadow-inner" style={{ height: '100%' }} />
+        <div className="absolute bottom-0 w-3 bg-slate-300 rounded-t-full shadow-inner" style={{ height: '100%' }} />
         
         {/* The Base */}
-        <div className="absolute bottom-0 w-full h-4 bg-gray-600 rounded-lg shadow-lg z-10" />
+        <div className="absolute bottom-0 w-full h-4 bg-slate-300 rounded-lg shadow-md z-10" />
 
         {/* Disks */}
         <div className="flex flex-col-reverse items-center pb-4 z-20 w-full gap-1">
@@ -152,7 +152,7 @@ const TowerOfHanoiVisualizer = ({ algorithmId }) => {
         </div>
 
         {/* Peg Label */}
-        <div className="absolute -bottom-8 text-gray-400 font-bold text-sm">Peg {pegName}</div>
+        <div className="absolute -bottom-8 text-slate-500 dark:text-slate-400 font-bold text-sm">Peg {pegName}</div>
       </div>
     );
   };
@@ -174,7 +174,7 @@ const TowerOfHanoiVisualizer = ({ algorithmId }) => {
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">{meta.name || "Tower of Hanoi"}</h2>
           <p className="text-xs opacity-90 mt-0.5">
@@ -192,28 +192,28 @@ const TowerOfHanoiVisualizer = ({ algorithmId }) => {
       </div>
 
       {/* Controls Bar */}
-      <div className="bg-gray-800 p-3 flex flex-wrap items-center gap-4 border-b border-gray-700">
+      <div className="bg-slate-50 dark:bg-slate-800 p-3 flex flex-wrap items-center gap-4 border-b border-slate-200 dark:border-slate-700">
         
-        <div className="flex items-center gap-2 bg-gray-700 p-1.5 rounded-lg border border-gray-600">
-          <span className="text-gray-300 text-xs font-semibold px-2 border-r border-gray-600">Disks</span>
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-700 p-1.5 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm">
+          <span className="text-slate-600 dark:text-slate-300 text-xs font-semibold px-2 border-r border-slate-200 dark:border-slate-600">Disks</span>
           <input
             type="number"
             min="1"
             max="8"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="w-16 px-2 py-1 bg-gray-800 text-white rounded border border-transparent focus:border-violet-400 focus:outline-none text-sm"
+            className="w-16 px-2 py-1 bg-slate-50 dark:bg-slate-600 text-slate-800 dark:text-white rounded border border-transparent focus:border-blue-400 focus:outline-none text-sm"
           />
         </div>
 
         <button
           onClick={handleRun}
-          className="flex items-center gap-1.5 bg-violet-500 hover:bg-violet-600 text-white px-4 py-1.5 rounded-lg font-semibold transition-colors text-sm"
+          className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 shadow-sm text-white px-4 py-1.5 rounded-lg font-semibold transition-colors text-sm"
         >
           <RotateCcw size={14} /> Run
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={togglePlay}
@@ -235,8 +235,8 @@ const TowerOfHanoiVisualizer = ({ algorithmId }) => {
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm ${
-            showSettings ? 'bg-fuchsia-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showSettings ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300'
           }`}
         >
           <Settings size={14} /> Speed
@@ -246,15 +246,15 @@ const TowerOfHanoiVisualizer = ({ algorithmId }) => {
 
       {/* Speed settings */}
       {showSettings && (
-        <div className="bg-gray-700 p-3 flex items-center gap-3 border-b border-gray-600">
-          <span className="text-white text-sm font-semibold">Animation Speed</span>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+          <span className="text-slate-700 dark:text-slate-200 text-sm font-semibold">Animation Speed</span>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded text-sm ${
-                  speed === value ? 'bg-fuchsia-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm transition-colors ${
+                  speed === value ? 'bg-blue-600 text-white shadow-sm border-blue-600' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -268,10 +268,13 @@ const TowerOfHanoiVisualizer = ({ algorithmId }) => {
       <div className="flex-1 flex overflow-hidden">
         
         {/* Puzzle View */}
-        <div className="flex-1 flex flex-col items-center justify-center bg-gray-950 relative p-4 overflow-auto custom-scrollbar">
+        <div 
+          className="flex-1 flex flex-col items-center justify-center relative p-4 overflow-auto custom-scrollbar dark:bg-slate-900"
+          style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        >
           {trace.length === 0 ? (
-            <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-lg font-medium select-none">
-              Click <span className="text-violet-400 mx-1">Run</span> to visualize Tower of Hanoi
+            <div className="absolute inset-0 flex items-center justify-center text-slate-500 dark:text-slate-400 text-lg font-medium select-none">
+              Click <span className="text-blue-600 mx-1">Run</span> to visualize Tower of Hanoi
             </div>
           ) : (
             renderPuzzle()

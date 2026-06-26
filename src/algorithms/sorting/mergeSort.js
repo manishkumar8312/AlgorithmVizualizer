@@ -1,4 +1,4 @@
-export async function mergeSort(array, updateArray, setComparingIndices, setSwappingIndices, speed) {
+export async function mergeSort(array, updateArray, setComparingIndices, setSwappingIndices, speedRef) {
   const arr = [...array];
   
   async function merge(arr, left, mid, right) {
@@ -12,7 +12,7 @@ export async function mergeSort(array, updateArray, setComparingIndices, setSwap
     
     while (i < n1 && j < n2) {
       setComparingIndices([left + i, mid + 1 + j]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
       
       if (L[i] <= R[j]) {
         arr[k] = L[i];
@@ -24,7 +24,7 @@ export async function mergeSort(array, updateArray, setComparingIndices, setSwap
       
       setSwappingIndices([k]);
       updateArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
       setSwappingIndices([]);
       k++;
     }
@@ -33,7 +33,7 @@ export async function mergeSort(array, updateArray, setComparingIndices, setSwap
       arr[k] = L[i];
       setSwappingIndices([k]);
       updateArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
       setSwappingIndices([]);
       i++;
       k++;
@@ -43,7 +43,7 @@ export async function mergeSort(array, updateArray, setComparingIndices, setSwap
       arr[k] = R[j];
       setSwappingIndices([k]);
       updateArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
       setSwappingIndices([]);
       j++;
       k++;

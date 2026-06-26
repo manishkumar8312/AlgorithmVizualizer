@@ -156,14 +156,14 @@ const HeapVisualizer = () => {
 
   const logColor = (type) => {
     switch (type) {
-      case 'start': return 'text-blue-400';
-      case 'compare': return 'text-amber-300';
-      case 'success': return 'text-emerald-400';
-      case 'error': return 'text-red-400';
-      case 'warn': return 'text-yellow-400';
-      case 'delete': return 'text-rose-400';
+      case 'start': return 'text-blue-600';
+      case 'compare': return 'text-amber-600';
+      case 'success': return 'text-emerald-600';
+      case 'error': return 'text-red-600';
+      case 'warn': return 'text-yellow-600';
+      case 'delete': return 'text-rose-600';
       case 'info':
-      default: return 'text-gray-300';
+      default: return 'text-slate-600';
     }
   };
 
@@ -183,7 +183,7 @@ const HeapVisualizer = () => {
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">Heap Operations</h2>
           <p className="text-xs opacity-90 mt-0.5">
@@ -212,7 +212,7 @@ const HeapVisualizer = () => {
       </div>
 
       {/* Controls */}
-      <div className="bg-gray-800 p-4 flex flex-wrap items-center gap-3">
+      <div className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 flex flex-wrap items-center gap-3">
         <input
           type="number"
           min={1}
@@ -222,7 +222,7 @@ const HeapVisualizer = () => {
           onKeyDown={handleKeyDown}
           placeholder="Value (1–999)"
           disabled={isRunning}
-          className="w-32 px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-amber-400 focus:outline-none text-sm placeholder-gray-400 disabled:opacity-50"
+          className="w-32 px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-white rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm focus:border-blue-400 focus:outline-none text-sm placeholder-slate-400 disabled:opacity-50"
         />
 
         <button
@@ -243,7 +243,7 @@ const HeapVisualizer = () => {
           Extract Root
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={() => handleRandomHeap()}
@@ -263,12 +263,12 @@ const HeapVisualizer = () => {
           Reset
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showSettings ? 'bg-amber-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showSettings ? 'bg-blue-100 dark:bg-blue-900/40 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
           }`}
         >
           <Settings size={16} />
@@ -277,8 +277,8 @@ const HeapVisualizer = () => {
 
         <button
           onClick={() => setShowExplanation(!showExplanation)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showExplanation ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showExplanation ? 'bg-blue-100 dark:bg-blue-900/40 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
           }`}
         >
           <MessageSquare size={16} />
@@ -288,15 +288,15 @@ const HeapVisualizer = () => {
 
       {/* Speed settings */}
       {showSettings && (
-        <div className="bg-gray-700 p-3 flex items-center gap-3">
-          <span className="text-white text-sm font-semibold">Animation Speed</span>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+          <span className="text-slate-700 dark:text-slate-200 text-sm font-semibold">Animation Speed</span>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded text-sm ${
-                  speed === value ? 'bg-amber-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm transition-colors ${
+                  speed === value ? 'bg-blue-600 text-white shadow-sm border-blue-600' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -310,29 +310,30 @@ const HeapVisualizer = () => {
       <div className="flex-1 flex overflow-hidden">
         
         {/* Left Side: Visualizations */}
-        <div className="flex-1 flex flex-col bg-gray-950 overflow-hidden relative">
+        <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-800 overflow-hidden relative">
           
           {/* Array Representation */}
-          <div className="h-24 border-b border-gray-800 flex flex-col items-center justify-center p-2">
-            <div className="text-gray-400 text-xs font-semibold mb-2 tracking-wider uppercase">Array Representation</div>
+          <div className="h-24 border-b border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center p-2 bg-white dark:bg-slate-900">
+            <div className="text-slate-500 dark:text-slate-400 text-xs font-semibold mb-2 tracking-wider uppercase">Array Representation</div>
             <div className="flex items-center gap-1 overflow-x-auto w-full px-4 justify-center">
               {heapArray.length === 0 ? (
-                 <span className="text-gray-600 text-sm">Empty</span>
+                 <span className="text-slate-400 text-sm">Empty</span>
               ) : (
                 heapArray.map((val, idx) => {
                   const state = getNodeState(idx);
-                  let bg = 'bg-gray-800';
-                  let border = 'border-gray-700';
-                  if (state === 'swapping') { bg = 'bg-red-900/50'; border = 'border-red-500'; }
-                  else if (state === 'comparing') { bg = 'bg-yellow-900/50'; border = 'border-yellow-500'; }
-                  else if (state === 'active') { bg = 'bg-green-900/50'; border = 'border-green-500'; }
+                  let bg = 'bg-slate-50';
+                  let border = 'border-slate-200';
+                  let text = 'text-slate-700';
+                  if (state === 'swapping') { bg = 'bg-red-100'; border = 'border-red-400'; text = 'text-red-700'; }
+                  else if (state === 'comparing') { bg = 'bg-yellow-100'; border = 'border-yellow-400'; text = 'text-yellow-700'; }
+                  else if (state === 'active') { bg = 'bg-emerald-100'; border = 'border-emerald-400'; text = 'text-emerald-700'; }
 
                   return (
                     <div key={`arr-${idx}`} className="flex flex-col items-center">
-                      <div className={`w-10 h-10 flex items-center justify-center border-2 rounded ${bg} ${border} text-white font-mono font-bold transition-colors duration-300`}>
+                      <div className={`w-10 h-10 flex items-center justify-center border-2 rounded ${bg} ${border} ${text} font-mono font-bold transition-colors duration-300`}>
                         {val}
                       </div>
-                      <div className="text-gray-500 text-[10px] mt-1">{idx}</div>
+                      <div className="text-slate-400 text-[10px] mt-1">{idx}</div>
                     </div>
                   );
                 })
@@ -341,11 +342,14 @@ const HeapVisualizer = () => {
           </div>
 
           {/* SVG Tree */}
-          <div className="flex-1 overflow-hidden relative">
+          <div 
+            className="flex-1 overflow-hidden relative dark:bg-slate-900"
+            style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+          >
              {heapArray.length === 0 ? (
-               <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-lg font-medium select-none">
-                Enter a value and click <span className="text-emerald-400 mx-1">Insert</span> or press{' '}
-                <span className="text-purple-400 mx-1">Random Heap</span>
+               <div className="absolute inset-0 flex items-center justify-center text-slate-500 dark:text-slate-400 text-lg font-medium select-none">
+                Enter a value and click <span className="text-emerald-600 mx-1">Insert</span> or press{' '}
+                <span className="text-purple-600 mx-1">Random Heap</span>
                </div>
              ) : (
                 <svg viewBox="0 0 1100 460" preserveAspectRatio="xMidYMid meet" className="w-full h-full">
@@ -354,8 +358,8 @@ const HeapVisualizer = () => {
                       <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#000" floodOpacity="0.45" />
                     </filter>
                     <radialGradient id="heap-grad-default" cx="35%" cy="30%" r="65%">
-                      <stop offset="0%" stopColor="#818cf8" />
-                      <stop offset="100%" stopColor="#4f46e5" />
+                      <stop offset="0%" stopColor="#60a5fa" />
+                      <stop offset="100%" stopColor="#2563eb" />
                     </radialGradient>
                     <radialGradient id="heap-grad-active" cx="35%" cy="30%" r="65%">
                       <stop offset="0%" stopColor="#34d399" />
@@ -384,7 +388,7 @@ const HeapVisualizer = () => {
                         y1={edge.from.y}
                         x2={edge.to.x}
                         y2={edge.to.y}
-                        stroke={isComparing ? '#fde047' : '#64748b'}
+                        stroke={isComparing ? '#fbbf24' : '#cbd5e1'}
                         strokeWidth={isComparing ? 4 : 3}
                         strokeLinecap="round"
                         className="transition-all duration-300"
@@ -465,20 +469,20 @@ const HeapVisualizer = () => {
 
         {/* Right Side: Log Panel */}
         {showExplanation && (
-          <div className="w-80 bg-gray-900 border-l border-gray-700 flex flex-col">
-            <div className="px-4 py-3 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-              <MessageSquare size={16} className="text-amber-400" />
-              <span className="text-white font-semibold text-sm">Algorithm Log</span>
+          <div className="w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 flex flex-col">
+            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+              <MessageSquare size={16} className="text-blue-500" />
+              <span className="text-slate-800 dark:text-slate-100 font-semibold text-sm">Algorithm Log</span>
               <button
                 onClick={() => setLogs([])}
-                className="ml-auto text-xs text-gray-400 hover:text-white transition-colors"
+                className="ml-auto text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors"
               >
                 Clear
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-3 space-y-1.5 text-xs font-mono">
               {logs.length === 0 && (
-                <p className="text-gray-500 text-center mt-6">
+                <p className="text-slate-500 dark:text-slate-400 text-center mt-6">
                   Perform an operation to see step‑by‑step logs here.
                 </p>
               )}
@@ -495,22 +499,22 @@ const HeapVisualizer = () => {
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg">
+      <div className="bg-slate-50 dark:bg-slate-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg border-t border-slate-200 dark:border-slate-700">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#6366f1' }} />
-          <span className="text-white">Idle</span>
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3b82f6' }} />
+          <span className="text-slate-600 dark:text-slate-300">Idle</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10b981' }} />
-          <span className="text-white">Active (Current)</span>
+          <span className="text-slate-600 dark:text-slate-300">Active (Current)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#eab308' }} />
-          <span className="text-white">Comparing</span>
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#facc15' }} />
+          <span className="text-slate-600 dark:text-slate-300">Comparing</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#ef4444' }} />
-          <span className="text-white">Swapping</span>
+          <span className="text-slate-600 dark:text-slate-300">Swapping</span>
         </div>
       </div>
     </div>

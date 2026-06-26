@@ -1,0 +1,25 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Algo Visualizer Icon</title>
+  <desc id="desc">Compact blue and green algorithm visualizer logo icon.</desc>
+  <defs>
+    <linearGradient id="iconBlue" x1="92" y1="92" x2="252" y2="312" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F62FE" />
+      <stop offset="1" stop-color="#1D4ED8" />
+    </linearGradient>
+    <linearGradient id="iconTeal" x1="236" y1="142" x2="392" y2="316" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#06B6D4" />
+      <stop offset="1" stop-color="#10B981" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="#FFFFFF" />
+  <path d="M108 332L196 172C205 157 226 157 235 172L267 226L240 255L213 208L150 332H108Z" fill="url(#iconBlue)" />
+  <rect x="208" y="268" width="22" height="54" rx="6" fill="#2954E6" />
+  <rect x="239" y="246" width="22" height="76" rx="6" fill="#1975E6" />
+  <rect x="270" y="228" width="22" height="94" rx="6" fill="#11A7D7" />
+  <path d="M258 214L308 241L348 223L384 263L410 208" stroke="url(#iconTeal)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="308" cy="241" r="14" fill="#0EA5D9" />
+  <circle cx="348" cy="223" r="14" fill="#14B8A6" />
+  <circle cx="384" cy="263" r="14" fill="#34D399" />
+  <circle cx="410" cy="208" r="14" fill="#22C55E" />
+  <path d="M286 172L327 238L391 124" stroke="url(#iconTeal)" stroke-width="0" />
+</svg>

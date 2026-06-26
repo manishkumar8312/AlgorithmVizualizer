@@ -1,4 +1,4 @@
-export async function quickSort(array, updateArray, setComparingIndices, setSwappingIndices, speed) {
+export async function quickSort(array, updateArray, setComparingIndices, setSwappingIndices, speedRef) {
   const arr = [...array];
   
   async function partition(arr, low, high) {
@@ -7,31 +7,31 @@ export async function quickSort(array, updateArray, setComparingIndices, setSwap
     
     for (let j = low; j < high; j++) {
       setComparingIndices([j, high]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
       
       if (arr[j] < pivot) {
         i++;
         
         if (i !== j) {
           setSwappingIndices([i, j]);
-          await new Promise(resolve => setTimeout(resolve, speed));
+          if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
           
           [arr[i], arr[j]] = [arr[j], arr[i]];
           updateArray([...arr]);
           
-          await new Promise(resolve => setTimeout(resolve, speed));
+          if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
           setSwappingIndices([]);
         }
       }
     }
     
     setSwappingIndices([i + 1, high]);
-    await new Promise(resolve => setTimeout(resolve, speed));
+    if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
     
     [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     updateArray([...arr]);
     
-    await new Promise(resolve => setTimeout(resolve, speed));
+    if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
     setSwappingIndices([]);
     setComparingIndices([]);
     

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Play, Pause, RotateCcw, FastForward, Settings, MessageSquare, List, ZoomIn, ZoomOut, Maximize } from 'lucide-react';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Play, Pause, RotateCcw, FastForward, Settings, MessageSquare, List } from 'lucide-react';
 import { SPEED_PRESETS } from '../utils/animationHelpers';
 import {
   runFactorialTrace,
@@ -281,7 +280,7 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
   const getStrokeColor = (nodeId) => {
     if (nodeId === activeNodeId) return '#fef3c7'; // yellow
     const state = visibleNodesMap.get(nodeId);
-    if (!state) return '#6366f1';
+    if (!state) return '#bfdbfe';
     if (state.type === 'SUCCESS' || state.type === 'RETURN') return '#bbf7d0'; // green
     if (state.type === 'BACKTRACK') return '#fecaca'; // red
     return '#a7f3d0';
@@ -302,7 +301,7 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">{meta.name || "Recursion Tree"}</h2>
           <p className="text-xs opacity-90 mt-0.5">
@@ -320,27 +319,27 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
       </div>
 
       {/* Controls Bar */}
-      <div className="bg-gray-800 p-3 flex flex-wrap items-center gap-4 border-b border-gray-700">
+      <div className="bg-slate-50 dark:bg-slate-800 p-3 flex flex-wrap items-center gap-4 border-b border-slate-200 dark:border-slate-700">
         
-        <div className="flex items-center gap-2 bg-gray-700 p-1.5 rounded-lg border border-gray-600">
-          <span className="text-gray-300 text-xs font-semibold px-2 border-r border-gray-600">Input</span>
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-700 p-1.5 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm">
+          <span className="text-slate-600 dark:text-slate-300 text-xs font-semibold px-2 border-r border-slate-200 dark:border-slate-600">Input</span>
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Input args"
-            className="w-32 px-2 py-1 bg-gray-800 text-white rounded border border-transparent focus:border-violet-400 focus:outline-none text-sm"
+            className="w-32 px-2 py-1 bg-slate-50 dark:bg-slate-600 text-slate-800 dark:text-white rounded border border-transparent focus:border-blue-400 focus:outline-none text-sm"
           />
         </div>
 
         <button
           onClick={handleRun}
-          className="flex items-center gap-1.5 bg-violet-500 hover:bg-violet-600 text-white px-4 py-1.5 rounded-lg font-semibold transition-colors text-sm"
+          className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 shadow-sm text-white px-4 py-1.5 rounded-lg font-semibold transition-colors text-sm"
         >
           <RotateCcw size={14} /> Run
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={togglePlay}
@@ -362,8 +361,8 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm ${
-            showSettings ? 'bg-fuchsia-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showSettings ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300'
           }`}
         >
           <Settings size={14} /> Speed
@@ -373,15 +372,15 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
 
       {/* Speed settings */}
       {showSettings && (
-        <div className="bg-gray-700 p-3 flex items-center gap-3 border-b border-gray-600">
-          <span className="text-white text-sm font-semibold">Animation Speed</span>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+          <span className="text-slate-700 dark:text-slate-200 text-sm font-semibold">Animation Speed</span>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded text-sm ${
-                  speed === value ? 'bg-fuchsia-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm transition-colors ${
+                  speed === value ? 'bg-blue-600 text-white shadow-sm border-blue-600' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -395,42 +394,28 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
       <div className="flex-1 flex overflow-hidden">
         
         {/* SVG Tree View */}
-        <div className="flex-1 bg-gray-950 relative overflow-hidden">
+        <div 
+          className="flex-1 relative overflow-auto custom-scrollbar dark:bg-slate-900"
+          style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        >
           {trace.length === 0 ? (
-            <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-lg font-medium select-none">
-              Click <span className="text-violet-400 mx-1">Run</span> to trace recursion tree
+            <div className="absolute inset-0 flex items-center justify-center text-slate-500 dark:text-slate-400 text-lg font-medium select-none">
+              Click <span className="text-blue-600 mx-1">Run</span> to trace recursion tree
             </div>
           ) : (
-            <TransformWrapper
-              initialScale={1}
-              minScale={0.1}
-              maxScale={4}
-              centerOnInit={true}
-              wheel={{ step: 0.1 }}
-            >
-              {({ zoomIn, zoomOut, resetTransform }) => (
-                <>
-                  <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
-                    <button onClick={() => zoomIn()} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded shadow border border-gray-700 transition-colors" title="Zoom In">
-                      <ZoomIn size={18} />
-                    </button>
-                    <button onClick={() => zoomOut()} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded shadow border border-gray-700 transition-colors" title="Zoom Out">
-                      <ZoomOut size={18} />
-                    </button>
-                    <button onClick={() => resetTransform()} className="bg-gray-800 hover:bg-gray-700 text-white p-2 rounded shadow border border-gray-700 transition-colors" title="Reset View">
-                      <Maximize size={18} />
-                    </button>
-                  </div>
-                  <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
-                    <div style={{ width: treeLayout.finalWidth, height: treeLayout.finalHeight }}>
-                      <svg viewBox={`0 0 ${treeLayout.finalWidth} ${treeLayout.finalHeight}`} preserveAspectRatio="xMidYMid meet" className="w-full h-full">
+            <div style={{ minWidth: treeLayout.finalWidth, minHeight: treeLayout.finalHeight, padding: '16px' }}>
+              <svg
+                width={treeLayout.finalWidth}
+                height={treeLayout.finalHeight}
+                viewBox={`0 0 ${treeLayout.finalWidth} ${treeLayout.finalHeight}`}
+              >
                 <defs>
                   <filter id="rec-shadow" x="-30%" y="-30%" width="160%" height="160%">
                     <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.4" />
                   </filter>
                   <radialGradient id="rec-grad-default" cx="35%" cy="30%" r="65%">
-                    <stop offset="0%" stopColor="#475569" />
-                    <stop offset="100%" stopColor="#1e293b" />
+                    <stop offset="0%" stopColor="#60a5fa" />
+                    <stop offset="100%" stopColor="#2563eb" />
                   </radialGradient>
                   <radialGradient id="rec-grad-visited" cx="35%" cy="30%" r="65%">
                     <stop offset="0%" stopColor="#818cf8" />
@@ -463,11 +448,11 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
                   const fromNode = treeLayout.nodes.find(n => n.id === edge.from);
                   const toNode = treeLayout.nodes.find(n => n.id === edge.to);
 
-                  let stroke = '#475569';
+                  let stroke = '#cbd5e1';
                   if (isActive) stroke = '#fcd34d';
                   else if (isBacktracking) stroke = '#ef4444';
                   else if (isReturned) stroke = '#10b981';
-                  else stroke = '#818cf8';
+                  else stroke = '#3b82f6';
 
                   return (
                     <line
@@ -558,11 +543,7 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
                   );
                 })}
               </svg>
-                    </div>
-                  </TransformComponent>
-                </>
-              )}
-            </TransformWrapper>
+            </div>
           )}
         </div>
 
@@ -570,22 +551,22 @@ const TreeRecursionVisualizer = ({ algorithmId }) => {
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg border-t border-gray-700">
+      <div className="bg-slate-50 dark:bg-slate-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg border-t border-slate-200 dark:border-slate-700">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#4f46e5' }} />
-          <span className="text-white">Active Frame</span>
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3b82f6' }} />
+          <span className="text-slate-600 dark:text-slate-300">Active Frame</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10b981' }} />
-          <span className="text-white">Returned / Success</span>
+          <span className="text-slate-600 dark:text-slate-300">Returned / Success</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded border-2 border-[#ef4444] border-dashed bg-transparent" />
-          <span className="text-white">Backtracked</span>
+          <span className="text-slate-600 dark:text-slate-300">Backtracked</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#fcd34d' }} />
-          <span className="text-white">Current Executing</span>
+          <span className="text-slate-600 dark:text-slate-300">Current Executing</span>
         </div>
       </div>
     </div>

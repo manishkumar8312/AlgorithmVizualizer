@@ -1,4 +1,4 @@
-export async function insertionSort(array, updateArray, setComparingIndices, setSwappingIndices, speed) {
+export async function insertionSort(array, updateArray, setComparingIndices, setSwappingIndices, speedRef) {
   const arr = [...array];
   const n = arr.length;
 
@@ -8,16 +8,16 @@ export async function insertionSort(array, updateArray, setComparingIndices, set
 
     while (j >= 0) {
       setComparingIndices([j, j + 1]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
 
       if (arr[j] > key) {
         setSwappingIndices([j, j + 1]);
-        await new Promise(resolve => setTimeout(resolve, speed));
+        if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
 
         arr[j + 1] = arr[j];
         updateArray([...arr]);
 
-        await new Promise(resolve => setTimeout(resolve, speed));
+        if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
         setSwappingIndices([]);
         j--;
       } else {

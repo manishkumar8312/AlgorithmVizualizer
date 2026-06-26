@@ -197,14 +197,14 @@ const TrieVisualizer = () => {
 
   const logColor = (type) => {
     switch (type) {
-      case 'start': return 'text-blue-400';
-      case 'compare': return 'text-amber-300';
-      case 'success': return 'text-emerald-400';
-      case 'error': return 'text-red-400';
-      case 'warn': return 'text-yellow-400';
-      case 'delete': return 'text-rose-400';
+      case 'start': return 'text-blue-600';
+      case 'compare': return 'text-amber-600';
+      case 'success': return 'text-emerald-600';
+      case 'error': return 'text-red-600';
+      case 'warn': return 'text-yellow-600';
+      case 'delete': return 'text-rose-600';
       case 'info':
-      default: return 'text-gray-300';
+      default: return 'text-slate-600';
     }
   };
 
@@ -224,7 +224,7 @@ const TrieVisualizer = () => {
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">Trie (Prefix Tree)</h2>
           <p className="text-xs opacity-90 mt-0.5">
@@ -242,7 +242,7 @@ const TrieVisualizer = () => {
       </div>
 
       {/* Controls */}
-      <div className="bg-gray-800 p-4 flex flex-wrap items-center gap-3">
+      <div className="bg-slate-50 border-b border-slate-200 p-4 flex flex-wrap items-center gap-3">
         <input
           type="text"
           value={inputValue}
@@ -250,7 +250,7 @@ const TrieVisualizer = () => {
           onKeyDown={handleKeyDown}
           placeholder="Enter word..."
           disabled={isRunning}
-          className="w-36 px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-cyan-400 focus:outline-none text-sm placeholder-gray-400 disabled:opacity-50"
+          className="w-36 px-3 py-2 bg-white text-slate-800 rounded-lg border border-slate-200 shadow-sm focus:border-blue-400 focus:outline-none text-sm placeholder-slate-400 disabled:opacity-50"
         />
 
         <button
@@ -289,7 +289,7 @@ const TrieVisualizer = () => {
           Delete
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={handleRandomWords}
@@ -309,12 +309,12 @@ const TrieVisualizer = () => {
           Reset
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showSettings ? 'bg-cyan-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showSettings ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-600'
           }`}
         >
           <Settings size={16} />
@@ -323,8 +323,8 @@ const TrieVisualizer = () => {
 
         <button
           onClick={() => setShowStats(!showStats)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showStats ? 'bg-teal-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showStats ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-600'
           }`}
         >
           <BarChart3 size={16} />
@@ -333,8 +333,8 @@ const TrieVisualizer = () => {
 
         <button
           onClick={() => setShowExplanation(!showExplanation)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showExplanation ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showExplanation ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-600'
           }`}
         >
           <MessageSquare size={16} />
@@ -344,15 +344,15 @@ const TrieVisualizer = () => {
 
       {/* Speed settings */}
       {showSettings && (
-        <div className="bg-gray-700 p-3 flex items-center gap-3">
-          <span className="text-white text-sm font-semibold">Animation Speed</span>
+        <div className="bg-slate-100 p-3 flex items-center gap-3 border-b border-slate-200">
+          <span className="text-slate-700 text-sm font-semibold">Animation Speed</span>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded text-sm ${
-                  speed === value ? 'bg-cyan-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm transition-colors ${
+                  speed === value ? 'bg-blue-600 text-white shadow-sm border-blue-600' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -364,18 +364,18 @@ const TrieVisualizer = () => {
 
       {/* Stats bar */}
       {showStats && (
-        <div className="bg-gray-800/80 border-t border-gray-700 px-5 py-2 flex flex-wrap gap-5 text-sm">
+        <div className="bg-slate-50 border-b border-slate-200 px-5 py-2 flex flex-wrap gap-5 text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-gray-400">Total Words:</span>
-            <span className="text-emerald-400 font-bold">{stats.wordCount}</span>
+            <span className="text-slate-500">Total Words:</span>
+            <span className="text-emerald-600 font-bold">{stats.wordCount}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400">Total Nodes:</span>
-            <span className="text-white font-bold">{stats.nodeCount}</span>
+            <span className="text-slate-500">Total Nodes:</span>
+            <span className="text-slate-700 font-bold">{stats.nodeCount}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400">Max Depth:</span>
-            <span className="text-cyan-400 font-bold">{stats.maxDepth}</span>
+            <span className="text-slate-500">Max Depth:</span>
+            <span className="text-cyan-600 font-bold">{stats.maxDepth}</span>
           </div>
         </div>
       )}
@@ -383,7 +383,10 @@ const TrieVisualizer = () => {
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
         {/* SVG Tree */}
-        <div className="flex-1 bg-gray-950 flex items-center justify-center overflow-hidden relative">
+        <div 
+          className="flex-1 flex items-center justify-center overflow-hidden relative"
+          style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        >
           <svg viewBox="0 0 1100 500" preserveAspectRatio="xMidYMid meet" className="w-full h-full">
             <defs>
               <filter id="trie-shadow" x="-30%" y="-30%" width="160%" height="160%">
@@ -391,8 +394,8 @@ const TrieVisualizer = () => {
               </filter>
               {/* Gradients */}
               <radialGradient id="trie-grad-default" cx="35%" cy="30%" r="65%">
-                <stop offset="0%" stopColor="#38bdf8" />
-                <stop offset="100%" stopColor="#0369a1" />
+                <stop offset="0%" stopColor="#60a5fa" />
+                <stop offset="100%" stopColor="#2563eb" />
               </radialGradient>
               <radialGradient id="trie-grad-root" cx="35%" cy="30%" r="65%">
                 <stop offset="0%" stopColor="#c084fc" />
@@ -423,7 +426,7 @@ const TrieVisualizer = () => {
               const isFound = foundNodes.includes(edge.from.id) && foundNodes.includes(edge.to.id);
               const isDeleting = deletingNode === edge.to.id;
 
-              let stroke = '#475569';
+              let stroke = '#cbd5e1';
               if (isDeleting) stroke = '#ef4444';
               else if (isFound) stroke = '#10b981';
               else if (fromActive && toActive) stroke = '#f59e0b';
@@ -445,7 +448,7 @@ const TrieVisualizer = () => {
                     y={(edge.from.y + edge.to.y) / 2 - 8}
                     width="16"
                     height="16"
-                    fill="#1e293b"
+                    fill="#e2e8f0"
                     rx="4"
                   />
                   <text
@@ -453,7 +456,7 @@ const TrieVisualizer = () => {
                     y={(edge.from.y + edge.to.y) / 2}
                     textAnchor="middle"
                     dy=".32em"
-                    fill="#cbd5e1"
+                    fill="#475569"
                     fontSize="10"
                     fontWeight="bold"
                     fontFamily="monospace"
@@ -559,20 +562,20 @@ const TrieVisualizer = () => {
 
         {/* Log Panel */}
         {showExplanation && (
-          <div className="w-80 bg-gray-900 border-l border-gray-700 flex flex-col">
-            <div className="px-4 py-3 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-              <MessageSquare size={16} className="text-cyan-400" />
-              <span className="text-white font-semibold text-sm">Algorithm Log</span>
+          <div className="w-80 bg-white border-l border-slate-200 flex flex-col">
+            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+              <MessageSquare size={16} className="text-blue-500" />
+              <span className="text-slate-800 font-semibold text-sm">Algorithm Log</span>
               <button
                 onClick={() => setLogs([])}
-                className="ml-auto text-xs text-gray-400 hover:text-white transition-colors"
+                className="ml-auto text-xs text-slate-500 hover:text-slate-800 transition-colors"
               >
                 Clear
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-3 space-y-1.5 text-xs font-mono">
               {logs.length === 0 && (
-                <p className="text-gray-500 text-center mt-6">
+                <p className="text-slate-500 text-center mt-6">
                   Perform an operation to see step‑by‑step logs here.
                 </p>
               )}
@@ -589,22 +592,22 @@ const TrieVisualizer = () => {
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg">
+      <div className="bg-slate-50 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg border-t border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#0284c7' }} />
-          <span className="text-white">Idle Node</span>
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3b82f6' }} />
+          <span className="text-slate-600">Idle Node</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 border-2 border-[#10b981] border-dashed rounded-full" />
-          <span className="text-white">End of Word</span>
+          <span className="text-slate-600">End of Word</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#f59e0b' }} />
-          <span className="text-white">Active Path</span>
+          <span className="text-slate-600">Active Path</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10b981' }} />
-          <span className="text-white">Found</span>
+          <span className="text-slate-600">Found</span>
         </div>
       </div>
     </div>

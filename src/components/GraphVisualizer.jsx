@@ -371,7 +371,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
       if (nodeStatus === 'visiting') return COLORS.COMPARING;
       if (nodeStatus === 'visited') return COLORS.SORTED;
     }
-    return '#1e293b'; // Default slate-800
+    return '#64748b'; // Default slate-500
   };
 
   const getEdgeColor = (edge) => {
@@ -383,7 +383,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
       if (edgeStatus === 'rejected') return COLORS.SWAPPING;
       if (edgeStatus === 'exploring') return COLORS.VISITED;
     }
-    return '#475569'; // Default slate-600
+    return '#94a3b8'; // Default slate-400 (lighter for white canvas)
   };
 
   const getEdgeWidth = (edge) => {
@@ -397,31 +397,30 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col bg-white dark:bg-slate-900 rounded-3xl overflow-hidden">
       {/* 1. Algorithm Info Header */}
-      <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-pink-700 text-white p-5 rounded-t-lg shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-6 py-5 flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold mb-1">{details.name}</h2>
-          <p className="text-xs opacity-90">{details.description}</p>
+          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">{details.name}</h2>
+          <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-2xl">{details.description}</p>
         </div>
         <div className="flex gap-3 text-xs shrink-0">
-          <div className="bg-white/15 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full">
-            <span className="font-semibold">Time:</span> {details.timeComplexity}
+          <div className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-md font-medium border border-blue-100 dark:border-blue-800">
+            <span className="font-bold opacity-75 mr-1">Time:</span> {details.timeComplexity}
           </div>
-          <div className="bg-white/15 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full">
-            <span className="font-semibold">Space:</span> {details.spaceComplexity}
+          <div className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-md font-medium border border-blue-100 dark:border-blue-800">
+            <span className="font-bold opacity-75 mr-1">Space:</span> {details.spaceComplexity}
           </div>
         </div>
       </div>
 
       {/* 2. Controls Toolbar */}
-      <div className="bg-slate-900 border-b border-slate-800 p-4 flex flex-wrap items-center justify-between gap-3 text-white">
+      <div className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          {/* Main playback control */}
           {steps.length === 0 ? (
             <button
               onClick={compileSteps}
-              className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-md shadow-indigo-600/10"
+              className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-blue-600/20"
             >
               <Play size={16} />
               Visualize
@@ -430,7 +429,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
             <>
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-md shadow-emerald-600/10"
+                className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-blue-600/20"
               >
                 {isPlaying ? <Pause size={16} /> : <Play size={16} />}
                 {isPlaying ? 'Pause' : 'Play'}
@@ -439,7 +438,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
               <button
                 onClick={handlePrevStep}
                 disabled={currentStepIndex <= 0}
-                className="bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors border border-slate-700"
+                className="bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed p-2.5 rounded-lg transition-colors shadow-sm"
               >
                 <ChevronLeft size={16} />
               </button>
@@ -447,7 +446,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
               <button
                 onClick={handleNextStep}
                 disabled={currentStepIndex >= steps.length - 1}
-                className="bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded-lg transition-colors border border-slate-700"
+                className="bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed p-2.5 rounded-lg transition-colors shadow-sm"
               >
                 <ChevronRight size={16} />
               </button>
@@ -456,25 +455,25 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
 
           <button
             onClick={resetVisualization}
-            className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors border border-slate-700"
+            className="flex items-center gap-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
           >
-            <RotateCcw size={16} />
+            <RotateCcw size={16} className="text-slate-500" />
             Reset
           </button>
 
           <button
             onClick={generateRandomGraph}
             disabled={steps.length > 0}
-            className="flex items-center gap-1.5 bg-purple-900/60 hover:bg-purple-800/60 border border-purple-700/50 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+            className="flex items-center gap-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 disabled:opacity-40 disabled:cursor-not-allowed px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
           >
-            <Shuffle size={16} />
+            <Shuffle size={16} className="text-slate-500" />
             Randomize
           </button>
         </div>
 
         {/* Speed Slider */}
-        <div className="flex items-center gap-3 bg-slate-800/60 border border-slate-700/50 px-3 py-1.5 rounded-lg">
-          <span className="text-xs text-slate-400 font-semibold select-none">Speed</span>
+        <div className="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-lg shadow-sm">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider select-none">Speed</span>
           <input
             type="range"
             min="50"
@@ -482,26 +481,26 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
             step="50"
             value={1250 - speed}
             onChange={(e) => setSpeed(1250 - Number(e.target.value))}
-            className="w-20 accent-indigo-500 cursor-pointer"
+            className="w-20 accent-blue-600 cursor-pointer"
           />
         </div>
       </div>
 
       {/* 3. Interactive Graph Editor Drawer */}
-      <div className="bg-slate-950/85 border-b border-slate-800 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-slate-300">
+      <div className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-3 flex flex-wrap items-center justify-between gap-3 text-slate-700 dark:text-slate-200">
         <div className="flex flex-wrap items-center gap-1.5 text-xs">
-          <span className="text-slate-400 font-semibold mr-1.5 select-none">Editor Tools:</span>
+          <span className="text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mr-1.5 select-none text-[11px]">Editor:</span>
           
           <button
             onClick={() => { setEditMode('select'); setEdgeStartNodeId(null); }}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all border ${editMode === 'select' ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-900 border-slate-800 hover:bg-slate-850'}`}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all border shadow-sm ${editMode === 'select' ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300'}`}
           >
             Select/Drag
           </button>
 
           <button
             onClick={() => { setEditMode('add-node'); setEdgeStartNodeId(null); }}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all border ${editMode === 'add-node' ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-900 border-slate-800 hover:bg-slate-850'}`}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all border shadow-sm ${editMode === 'add-node' ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300'}`}
             title="Double-click canvas to place a node"
           >
             + Add Node
@@ -509,7 +508,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
 
           <button
             onClick={() => { setEditMode('add-edge'); setEdgeStartNodeId(null); }}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all border ${editMode === 'add-edge' ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-900 border-slate-800 hover:bg-slate-850'}`}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all border shadow-sm ${editMode === 'add-edge' ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300'}`}
             title="Click node A then node B to link"
           >
             + Link Edges
@@ -517,53 +516,52 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
 
           <button
             onClick={() => { setEditMode('delete'); setEdgeStartNodeId(null); }}
-            className={`px-3 py-1.5 rounded-md font-semibold transition-all border ${editMode === 'delete' ? 'bg-rose-950/60 border-rose-800 text-rose-300 hover:bg-rose-900/60' : 'bg-slate-900 border-slate-800'}`}
+            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all border shadow-sm ${editMode === 'delete' ? 'bg-rose-50 border-rose-300 text-rose-600' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600'}`}
             title="Click node or edge to erase"
           >
-            <Trash2 size={13} className="inline mr-1" />
+            <Trash2 size={12} className="inline mr-1" />
             Erase Mode
           </button>
 
           <button
             onClick={() => { setVertices([]); setEdges([]); setSourceId(null); setTargetId(null); }}
-            className="px-3 py-1.5 rounded-md font-semibold transition-all bg-slate-900 border border-slate-800 hover:bg-slate-800 text-rose-400"
+            className="px-3 py-1.5 rounded-md text-xs font-semibold transition-all bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-slate-600 dark:text-slate-300 shadow-sm"
           >
             Clear Canvas
           </button>
         </div>
 
         {/* Settings Toggle & Node Source Selectors */}
-        <div className="flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 dark:text-slate-300">
           {!details.undirectedOnly && !details.directedOnly && (
-            <label className="flex items-center gap-1.5 cursor-pointer">
+            <label className="flex items-center gap-1.5 cursor-pointer font-medium">
               <input
                 type="checkbox"
                 checked={isDirected}
                 onChange={(e) => setIsDirected(e.target.checked)}
-                className="rounded border-slate-700 bg-slate-800 accent-indigo-500"
+                className="rounded accent-blue-600"
               />
               <span>Directed</span>
             </label>
           )}
 
-          <label className="flex items-center gap-1.5 cursor-pointer">
+          <label className="flex items-center gap-1.5 cursor-pointer font-medium">
             <input
               type="checkbox"
               checked={isWeighted}
               onChange={(e) => setIsWeighted(e.target.checked)}
-              className="rounded border-slate-700 bg-slate-800 accent-indigo-500"
+              className="rounded accent-blue-600"
             />
             <span>Weighted</span>
           </label>
 
-          {/* Select Source/Target */}
           {details.needsSource && vertices.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              <span>Source:</span>
+            <div className="flex items-center gap-1.5 font-medium">
+              <span className="text-slate-500">Source:</span>
               <select
                 value={sourceId || ''}
                 onChange={(e) => setSourceId(Number(e.target.value))}
-                className="bg-slate-900 border border-slate-800 rounded px-1.5 py-1 text-white text-xs font-semibold focus:outline-none focus:border-indigo-500"
+                className="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-md px-2 py-1 text-slate-800 dark:text-white text-xs font-semibold focus:outline-none focus:border-blue-400 shadow-sm"
               >
                 {vertices.map(v => (
                   <option key={v.id} value={v.id}>{v.label}</option>
@@ -573,12 +571,12 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
           )}
 
           {details.needsTarget && vertices.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              <span>Target:</span>
+            <div className="flex items-center gap-1.5 font-medium">
+              <span className="text-slate-500">Target:</span>
               <select
                 value={targetId || ''}
                 onChange={(e) => setTargetId(Number(e.target.value))}
-                className="bg-slate-900 border border-slate-800 rounded px-1.5 py-1 text-white text-xs font-semibold focus:outline-none focus:border-indigo-500"
+                className="bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-md px-2 py-1 text-slate-800 dark:text-white text-xs font-semibold focus:outline-none focus:border-blue-400 shadow-sm"
               >
                 <option value="">None</option>
                 {vertices.map(v => (
@@ -592,18 +590,18 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
 
       {/* 4. Steps Operational Logs Overlay */}
       {steps.length > 0 && activeStep && (
-        <div className="bg-slate-900 border-b border-slate-800 px-5 py-3 flex items-center justify-between text-xs md:text-sm font-semibold">
-          <div className="flex items-center gap-2 text-indigo-400">
-            <span>Step {currentStepIndex + 1} of {steps.length}:</span>
-            <span className="text-white font-medium">{activeStep.description}</span>
+        <div className="bg-blue-50 dark:bg-blue-900/20 border-b border-blue-100 dark:border-blue-900 px-6 py-3 flex items-center justify-between text-xs md:text-sm font-semibold">
+          <div className="flex items-center gap-2 text-blue-600">
+            <span className="text-slate-500 dark:text-slate-400">Step {currentStepIndex + 1} of {steps.length}:</span>
+            <span className="text-slate-800 dark:text-slate-100 font-semibold">{activeStep.description}</span>
           </div>
           {activeStep.queue && activeStep.queue.length > 0 && (
-            <div className="text-xs text-slate-400 bg-slate-950 px-2.5 py-1 rounded border border-slate-800">
+            <div className="text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-700 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-600 shadow-sm">
               Queue: [{activeStep.queue.map(id => vertices.find(v => v.id === id)?.label || id).join(', ')}]
             </div>
           )}
           {activeStep.stack && activeStep.stack.length > 0 && (
-            <div className="text-xs text-slate-400 bg-slate-950 px-2.5 py-1 rounded border border-slate-800">
+            <div className="text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-700 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-600 shadow-sm">
               Stack: [{activeStep.stack.map(id => vertices.find(v => v.id === id)?.label || id).join(', ')}]
             </div>
           )}
@@ -611,9 +609,9 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
       )}
 
       {/* 5. Main Canvas Drawing Screen */}
-      <div className="flex-1 bg-slate-950 p-4 relative overflow-hidden flex items-center justify-center min-h-[360px]">
+      <div className="flex-1 bg-slate-50 dark:bg-slate-900 p-4 relative overflow-hidden flex items-center justify-center min-h-[360px]">
         {vertices.length === 0 && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500 text-sm gap-2 select-none pointer-events-none">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-sm gap-2 select-none pointer-events-none z-10">
             <HelpCircle size={32} />
             <span>Canvas is empty. Double-click to place nodes, or click Randomize!</span>
           </div>
@@ -621,7 +619,8 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
 
         <svg
           ref={svgRef}
-          className="w-full h-full min-h-[350px] border border-slate-900 rounded-lg bg-slate-950/40"
+          className="w-full h-full min-h-[350px] border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm dark:bg-slate-900"
+          style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
           onMouseMove={handleSvgMouseMove}
           onMouseUp={handleSvgMouseUp}
           onMouseLeave={handleSvgMouseUp}
@@ -638,7 +637,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
               markerHeight="8"
               orient="auto-start-reverse"
             >
-              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#475569" />
+              <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#94a3b8" />
             </marker>
             <marker
               id="arrow-considering"
@@ -730,14 +729,14 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
                       width={24}
                       height={20}
                       rx={4}
-                      fill="#0f172a"
-                      stroke="#334155"
+                      fill="#ffffff"
+                      stroke="#e2e8f0"
                       strokeWidth="1"
                     />
                     <text
                       x={midX}
                       y={midY + 1}
-                      fill="#cbd5e1"
+                      fill="#334155"
                       fontSize="11"
                       fontWeight="600"
                       textAnchor="middle"
@@ -838,9 +837,9 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
                   stroke={
                     isSource ? COLORS.START :
                     isTarget ? COLORS.END :
-                    selectedNodeId === node.id ? '#6366f1' : '#475569'
+                    selectedNodeId === node.id ? '#3b82f6' : '#cbd5e1'
                   }
-                  strokeWidth={isSource || isTarget ? 3 : selectedNodeId === node.id ? 3 : 2}
+                  strokeWidth={isSource || isTarget ? 3 : selectedNodeId === node.id ? 3 : 1.5}
                   className="transition-all duration-200"
                 />
 
@@ -917,28 +916,28 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
       </div>
 
       {/* 6. Footer Legend */}
-      <div className="bg-slate-900 border-t border-slate-800 p-4 flex flex-wrap gap-4 justify-center text-xs text-slate-300 rounded-b-lg">
+      <div className="bg-slate-50 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-wrap gap-6 justify-center text-[12px] font-medium text-slate-600 dark:text-slate-300">
         <div className="flex items-center gap-2">
-          <div className="w-3.5 h-3.5 rounded-md border border-slate-700 bg-slate-800"></div>
+          <div className="w-3.5 h-3.5 rounded-sm border border-slate-200 bg-slate-100 shadow-sm"></div>
           <span>Unvisited</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3.5 h-3.5 rounded-md" style={{ backgroundColor: COLORS.COMPARING }}></div>
+          <div className="w-3.5 h-3.5 rounded-sm shadow-sm" style={{ backgroundColor: COLORS.COMPARING }}></div>
           <span>Visiting / Evaluating</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3.5 h-3.5 rounded-md" style={{ backgroundColor: COLORS.SORTED }}></div>
+          <div className="w-3.5 h-3.5 rounded-sm shadow-sm" style={{ backgroundColor: COLORS.SORTED }}></div>
           <span>Visited / Solved</span>
         </div>
         {details.needsSource && (
           <div className="flex items-center gap-2">
-            <div className="w-3.5 h-3.5 rounded-md" style={{ backgroundColor: COLORS.START }}></div>
+            <div className="w-3.5 h-3.5 rounded-sm shadow-sm" style={{ backgroundColor: COLORS.START }}></div>
             <span>Source Node</span>
           </div>
         )}
         {details.needsTarget && (
           <div className="flex items-center gap-2">
-            <div className="w-3.5 h-3.5 rounded-md" style={{ backgroundColor: COLORS.END }}></div>
+            <div className="w-3.5 h-3.5 rounded-sm shadow-sm" style={{ backgroundColor: COLORS.END }}></div>
             <span>Target Node</span>
           </div>
         )}

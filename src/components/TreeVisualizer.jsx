@@ -89,29 +89,29 @@ const TreeVisualizer = ({ algorithm, algorithmInfo }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col overflow-hidden">
+    <div className="w-full h-full flex flex-col overflow-hidden bg-white rounded-3xl overflow-hidden">
       {/* Algorithm Info Header – compact to give tree more room */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white border-b border-slate-200 px-6 py-5 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-xl font-bold">{algorithmInfo.name}</h2>
-          <p className="text-xs opacity-90 mt-0.5">{algorithmInfo.description}</p>
+          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">{algorithmInfo.name}</h2>
+          <p className="text-[13px] text-slate-500 leading-relaxed mt-0.5">{algorithmInfo.description}</p>
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
-          <div className="bg-white/20 px-2.5 py-1 rounded-full">
+          <div className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium border border-blue-100">
             <span className="font-semibold">Time:</span> {algorithmInfo.timeComplexity}
           </div>
-          <div className="bg-white/20 px-2.5 py-1 rounded-full">
+          <div className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium border border-blue-100">
             <span className="font-semibold">Space:</span> {algorithmInfo.spaceComplexity}
           </div>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="bg-gray-800 p-4 flex flex-wrap items-center gap-3">
+      <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex flex-wrap items-center gap-3">
         <button
           onClick={handleTraverse}
           disabled={isTraversing}
-          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-sm shadow-blue-600/20"
         >
           <Play size={18} />
           Start Traversal
@@ -120,7 +120,7 @@ const TreeVisualizer = ({ algorithm, algorithmInfo }) => {
         <button
           onClick={resetTree}
           disabled={isTraversing}
-          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          className="flex items-center gap-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
         >
           <RotateCcw size={18} />
           New Tree
@@ -128,20 +128,24 @@ const TreeVisualizer = ({ algorithm, algorithmInfo }) => {
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
-            showSettings ? 'bg-purple-600 text-white' : 'bg-purple-500 hover:bg-purple-600 text-white'
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors border ${
+            showSettings
+              ? 'bg-blue-100 border-blue-300 text-blue-700'
+              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
           }`}
         >
           <Settings size={18} />
           Settings
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-2" />
+        <div className="h-6 w-px bg-slate-200 mx-2" />
 
         <button
           onClick={() => setShowExplanation(!showExplanation)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-colors ${
-            showExplanation ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors border ${
+            showExplanation
+              ? 'bg-blue-600 text-white border-blue-600'
+              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
           }`}
           title="Algorithm Explanation"
         >
@@ -152,15 +156,17 @@ const TreeVisualizer = ({ algorithm, algorithmInfo }) => {
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="bg-gray-700 p-4">
-          <label className="text-white text-sm font-semibold mb-2 block">Animation Speed</label>
+        <div className="bg-slate-100 border-b border-slate-200 px-6 py-4">
+          <label className="text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-2 block">Animation Speed</label>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded ${
-                  speed === value ? 'bg-blue-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm font-medium transition-colors ${
+                  speed === value
+                    ? 'bg-blue-600 text-white shadow-sm border-blue-600'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -171,12 +177,12 @@ const TreeVisualizer = ({ algorithm, algorithmInfo }) => {
       )}
 
       {/* Visualization Area */}
-      <div className="flex-1 bg-gray-950 flex items-center justify-center p-2 overflow-hidden relative">
+      <div className="flex-1 bg-slate-50 flex items-center justify-center p-4 overflow-hidden relative">
         <svg viewBox="0 0 1100 460" preserveAspectRatio="xMidYMid meet" className="w-full h-full">
           <defs>
             {/* Drop shadow filter for nodes */}
             <filter id="node-shadow" x="-30%" y="-30%" width="160%" height="160%">
-              <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#000" floodOpacity="0.45" />
+              <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#94a3b8" floodOpacity="0.3" />
             </filter>
             {/* Glow filter for active node */}
             <filter id="node-glow" x="-40%" y="-40%" width="180%" height="180%">
@@ -209,7 +215,7 @@ const TreeVisualizer = ({ algorithm, algorithmInfo }) => {
               y1={edge.from.y}
               x2={edge.to.x}
               y2={edge.to.y}
-              stroke="#64748b"
+              stroke="#cbd5e1"
               strokeWidth="3"
               strokeLinecap="round"
             />
@@ -272,18 +278,18 @@ const TreeVisualizer = ({ algorithm, algorithmInfo }) => {
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg">
+      <div className="bg-slate-50 border-t border-slate-200 px-6 py-4 flex flex-wrap gap-6 justify-center text-[12px] font-medium text-slate-600 rounded-b-lg">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3b82f6' }}></div>
-          <span className="text-white">Unvisited</span>
+          <div className="w-3.5 h-3.5 rounded-sm shadow-sm" style={{ backgroundColor: '#3b82f6' }}></div>
+          <span>Unvisited</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#f59e0b' }}></div>
-          <span className="text-white">Processing</span>
+          <div className="w-3.5 h-3.5 rounded-sm shadow-sm" style={{ backgroundColor: '#f59e0b' }}></div>
+          <span>Processing</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10b981' }}></div>
-          <span className="text-white">Visited</span>
+          <div className="w-3.5 h-3.5 rounded-sm shadow-sm" style={{ backgroundColor: '#10b981' }}></div>
+          <span>Visited</span>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-export async function bubbleSort(array, updateArray, setComparingIndices, setSwappingIndices, speed) {
+export async function bubbleSort(array, updateArray, setComparingIndices, setSwappingIndices, speedRef) {
   const arr = [...array];
   const n = arr.length;
 
@@ -6,18 +6,18 @@ export async function bubbleSort(array, updateArray, setComparingIndices, setSwa
     for (let j = 0; j < n - i - 1; j++) {
       // Highlight comparing elements
       setComparingIndices([j, j + 1]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
 
       if (arr[j] > arr[j + 1]) {
         // Highlight swapping elements
         setSwappingIndices([j, j + 1]);
-        await new Promise(resolve => setTimeout(resolve, speed));
+        if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
 
         // Swap elements
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
         updateArray([...arr]);
 
-        await new Promise(resolve => setTimeout(resolve, speed));
+        if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
         setSwappingIndices([]);
       }
 

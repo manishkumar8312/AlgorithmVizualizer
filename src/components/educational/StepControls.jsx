@@ -15,28 +15,23 @@ const StepControls = ({
   disabled = false
 }) => {
   return (
-    <div className="bg-gray-800 p-4 flex flex-wrap items-center gap-3">
-      {/* Step Counter */}
-      <div className="text-white text-sm font-semibold bg-gray-700 px-4 py-2 rounded-lg">
-        Step {currentStep} / {totalSteps}
-      </div>
-
+    <div className="w-full bg-white border-y border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.05)] h-16 flex items-center justify-center gap-3">
       {/* Control Buttons */}
       <button
         onClick={onReset}
         disabled={disabled}
-        className="flex items-center gap-2 bg-red-500 hover:bg-red-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+        className="flex items-center gap-2 bg-white border border-red-200 text-red-500 hover:bg-red-50 disabled:border-gray-200 disabled:text-gray-400 disabled:bg-white disabled:cursor-not-allowed px-4 h-10 rounded-lg text-sm font-semibold transition-colors"
       >
-        <RotateCcw size={18} />
+        <RotateCcw size={16} />
         Reset
       </button>
 
       <button
         onClick={onPrevious}
         disabled={disabled || currentStep <= 1}
-        className="flex items-center gap-2 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+        className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:border-gray-200 disabled:text-gray-400 disabled:bg-white disabled:cursor-not-allowed px-4 h-10 rounded-lg text-sm font-semibold transition-colors"
       >
-        <SkipBack size={18} />
+        <SkipBack size={16} />
         Previous
       </button>
 
@@ -44,18 +39,18 @@ const StepControls = ({
         <button
           onClick={onPlay}
           disabled={disabled || currentStep >= totalSteps}
-          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 disabled:cursor-not-allowed text-white px-6 h-10 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-purple-600/20"
         >
-          <Play size={18} />
+          <Play size={16} className="ml-0.5" />
           {isPaused ? 'Resume' : 'Play'}
         </button>
       ) : (
         <button
           onClick={onPause}
           disabled={disabled}
-          className="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 disabled:cursor-not-allowed text-white px-6 h-10 rounded-lg text-sm font-semibold transition-colors shadow-sm shadow-purple-600/20"
         >
-          <Pause size={18} />
+          <Pause size={16} />
           Pause
         </button>
       )}
@@ -63,21 +58,11 @@ const StepControls = ({
       <button
         onClick={onNext}
         disabled={disabled || currentStep >= totalSteps}
-        className="flex items-center gap-2 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+        className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:border-gray-200 disabled:text-gray-400 disabled:bg-white disabled:cursor-not-allowed px-4 h-10 rounded-lg text-sm font-semibold transition-colors"
       >
-        <SkipForward size={18} />
+        <SkipForward size={16} />
         Next
       </button>
-
-      {/* Progress Bar */}
-      <div className="flex-1 ml-4">
-        <div className="w-full bg-gray-700 rounded-full h-2">
-          <div
-            className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-          />
-        </div>
-      </div>
     </div>
   );
 };

@@ -344,13 +344,14 @@ const PathFindingVisualizer = ({ algorithm, algorithmInfo }) => {
   };
 
   // ── Cell appearance
+  // ── Cell appearance
   const getCellStyle = (node) => {
-    if (node.isStart) return 'bg-emerald-400 shadow-[0_0_12px_2px_rgba(52,211,153,0.7)] z-10 scale-110';
-    if (node.isEnd) return 'bg-rose-500 shadow-[0_0_12px_2px_rgba(244,63,94,0.7)] z-10 scale-110';
-    if (node.isWall) return 'bg-slate-950 border-slate-700 wall-cell';
-    if (node.isPath) return 'path-cell bg-yellow-300';
-    if (node.isVisited) return 'visited-cell bg-cyan-500';
-    return 'bg-gray-700 hover:bg-gray-600';
+    if (node.isStart) return 'bg-emerald-500 shadow-[0_0_12px_2px_rgba(16,185,129,0.4)] z-10 scale-110 border-emerald-600';
+    if (node.isEnd) return 'bg-rose-500 shadow-[0_0_12px_2px_rgba(244,63,94,0.4)] z-10 scale-110 border-rose-600';
+    if (node.isWall) return 'bg-slate-700 border-slate-800 wall-cell';
+    if (node.isPath) return 'path-cell bg-yellow-400 border-yellow-500';
+    if (node.isVisited) return 'visited-cell bg-blue-400 border-blue-500';
+    return 'bg-white hover:bg-slate-50 border-slate-200';
   };
 
   const getCursor = (node) => {
@@ -359,41 +360,41 @@ const PathFindingVisualizer = ({ algorithm, algorithmInfo }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-200">
       {/* Header */}
-      <div className="bg-gradient-to-r from-cyan-600 to-blue-700 text-white p-5 rounded-t-lg shadow-lg">
-        <div className="flex items-start justify-between">
-          <div>
-            <h2 className="text-2xl font-bold mb-1">{algorithmInfo.name}</h2>
-            <div className="flex flex-wrap gap-3 text-sm mb-2">
-              <div className="bg-white/20 px-3 py-1 rounded-full">
-                <span className="font-semibold">Time:</span> {algorithmInfo.timeComplexity}
-              </div>
-              <div className="bg-white/20 px-3 py-1 rounded-full">
-                <span className="font-semibold">Space:</span> {algorithmInfo.spaceComplexity}
-              </div>
-              {stats && (
-                <>
-                  <div className="bg-cyan-400/30 px-3 py-1 rounded-full">
-                    <span className="font-semibold">Visited:</span> {stats.visited} nodes
-                  </div>
-                  <div className="bg-yellow-400/30 px-3 py-1 rounded-full">
-                    <span className="font-semibold">Path:</span> {stats.path} steps
-                  </div>
-                </>
-              )}
-            </div>
-            <p className="text-xs opacity-80">{algorithmInfo.description}</p>
+      <div className="bg-white border-b border-slate-200 px-6 py-5">
+        <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-2">
+          {algorithmInfo.name}
+        </h2>
+        <div className="flex flex-wrap gap-3 text-xs mb-3">
+          <div className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium border border-blue-100">
+            <span className="font-bold opacity-75 mr-1">Time:</span> {algorithmInfo.timeComplexity}
           </div>
+          <div className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-medium border border-blue-100">
+            <span className="font-bold opacity-75 mr-1">Space:</span> {algorithmInfo.spaceComplexity}
+          </div>
+          {stats && (
+            <>
+              <div className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-medium border border-slate-200">
+                <span className="font-bold opacity-75 mr-1">Visited:</span> {stats.visited} nodes
+              </div>
+              <div className="bg-yellow-50 text-yellow-700 px-2.5 py-1 rounded-md font-medium border border-yellow-200">
+                <span className="font-bold opacity-75 mr-1">Path:</span> {stats.path} steps
+              </div>
+            </>
+          )}
         </div>
+        <p className="text-[13px] text-slate-500 leading-relaxed max-w-4xl">
+          {algorithmInfo.description}
+        </p>
       </div>
 
       {/* Controls */}
-      <div className="bg-gray-800 px-4 py-3 flex flex-wrap items-center gap-2 border-b border-gray-700">
+      <div className="bg-slate-50 border-b border-slate-200 px-6 py-4 flex flex-wrap items-center gap-3">
         <button
           onClick={visualize}
           disabled={isVisualizing}
-          className="flex items-center gap-2 bg-green-500 hover:bg-green-400 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-all shadow"
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-sm shadow-blue-600/20"
         >
           <Play size={16} /> Visualize
         </button>
@@ -401,71 +402,66 @@ const PathFindingVisualizer = ({ algorithm, algorithmInfo }) => {
         <button
           onClick={handleReset}
           disabled={isVisualizing}
-          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-400 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-all shadow"
+          className="flex items-center gap-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
         >
-          <RotateCcw size={16} /> Reset
+          <RotateCcw size={16} className="text-slate-500" /> Reset
         </button>
 
         <button
           onClick={handleClearWalls}
           disabled={isVisualizing}
-          className="flex items-center gap-2 bg-red-500 hover:bg-red-400 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-all shadow"
+          className="flex items-center gap-2 bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-700 hover:text-rose-600 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
         >
-          <Eraser size={16} /> Clear Walls
+          <Eraser size={16} className={isVisualizing ? "text-slate-500" : "text-rose-500"} /> Clear Walls
         </button>
 
         {/* Live mode toggle */}
         <button
           onClick={() => setLiveMode(v => !v)}
           disabled={isVisualizing}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all shadow border-2 ${
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-sm border ${
             liveMode
-              ? 'bg-yellow-400 text-gray-900 border-yellow-300'
-              : 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'
+              ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
+              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
           }`}
         >
-          <Zap size={16} />
+          <Zap size={16} className={liveMode ? "text-yellow-600" : "text-slate-400"} />
           {liveMode ? 'Live ON' : 'Live OFF'}
         </button>
 
         {/* Speed */}
-        <div className="flex items-center gap-2 ml-2">
-          <span className="text-gray-400 text-xs font-semibold">SPEED</span>
-          {[['Slow', 100], ['Med', 30], ['Fast', 8]].map(([label, val]) => (
-            <button
-              key={label}
-              onClick={() => setSpeed(val)}
-              disabled={isVisualizing}
-              className={`px-3 py-1 rounded text-xs font-bold transition-all ${
-                speed === val ? 'bg-cyan-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="ml-auto text-gray-400 text-xs text-right hidden sm:block">
-          <span className="text-emerald-400 font-bold">●</span> drag start &nbsp;
-          <span className="text-rose-400 font-bold">●</span> drag end &nbsp;
-          <span className="text-gray-300 font-bold">□</span> click/drag = wall &nbsp;
-          <span className="text-yellow-400 font-bold">⚡</span> Live = instant path
+        <div className="flex items-center gap-2 ml-auto">
+          <span className="text-[11px] text-slate-500 font-bold uppercase tracking-wider">SPEED</span>
+          <div className="flex bg-white border border-slate-200 rounded-lg p-1 shadow-sm">
+            {[['Slow', 100], ['Med', 30], ['Fast', 8]].map(([label, val]) => (
+              <button
+                key={label}
+                onClick={() => setSpeed(val)}
+                disabled={isVisualizing}
+                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                  speed === val ? 'bg-slate-100 text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Grid */}
       <div
-        className="flex-1 bg-gray-900 flex items-center justify-center overflow-auto select-none p-2"
+        className="flex-1 bg-slate-100/50 flex items-center justify-center overflow-auto select-none p-6"
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
       >
-        <div className="inline-block rounded-md overflow-hidden border border-gray-700 shadow-2xl">
+        <div className="inline-block rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white p-1">
           {grid.map((row, rIdx) => (
             <div key={rIdx} className="flex">
               {row.map((node, cIdx) => (
                 <div
                   key={cIdx}
-                  className={`w-5 h-5 border border-gray-800/50 transition-all duration-100 ${getCellStyle(node)} ${getCursor(node)}`}
+                  className={`w-5 h-5 border-r border-b border-slate-100 transition-all duration-100 ${getCellStyle(node)} ${getCursor(node)}`}
                   onMouseDown={() => handleMouseDown(node.row, node.col)}
                   onMouseEnter={() => handleMouseEnter(node.row, node.col)}
                 />
@@ -476,31 +472,31 @@ const PathFindingVisualizer = ({ algorithm, algorithmInfo }) => {
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-xs rounded-b-lg border-t border-gray-700">
+      <div className="bg-slate-50 border-t border-slate-200 px-6 py-4 flex flex-wrap gap-6 justify-center text-[12px] font-medium text-slate-600">
         {[
-          ['bg-emerald-400', 'Start'],
+          ['bg-emerald-500', 'Start'],
           ['bg-rose-500', 'End'],
-          ['bg-gray-900 border border-gray-600', 'Wall'],
-          ['bg-cyan-500', 'Visited'],
-          ['bg-yellow-300', 'Shortest Path'],
+          ['bg-slate-700', 'Wall'],
+          ['bg-blue-400', 'Visited'],
+          ['bg-yellow-400', 'Shortest Path'],
         ].map(([cls, label]) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <div className={`w-4 h-4 rounded-sm ${cls}`} />
-            <span className="text-gray-300">{label}</span>
+          <div key={label} className="flex items-center gap-2">
+            <div className={`w-3.5 h-3.5 rounded-sm shadow-sm ${cls}`} />
+            <span>{label}</span>
           </div>
         ))}
       </div>
 
       <style>{`
         @keyframes visitedPop {
-          0%   { transform: scale(0.3); opacity: 0; background-color: #06b6d4; }
-          50%  { transform: scale(1.15); background-color: #67e8f9; }
-          100% { transform: scale(1);   opacity: 1; background-color: #06b6d4; }
+          0%   { transform: scale(0.3); opacity: 0; background-color: #3b82f6; }
+          50%  { transform: scale(1.15); background-color: #60a5fa; }
+          100% { transform: scale(1);   opacity: 1; background-color: #60a5fa; }
         }
         @keyframes pathPop {
-          0%   { transform: scale(0.5); background-color: #fde047; }
+          0%   { transform: scale(0.5); background-color: #facc15; }
           60%  { transform: scale(1.3); background-color: #fef08a; }
-          100% { transform: scale(1);   background-color: #fde047; }
+          100% { transform: scale(1);   background-color: #facc15; }
         }
         .visited-cell { animation: visitedPop 0.35s ease forwards; }
         .path-cell    { animation: pathPop 0.3s ease forwards; }

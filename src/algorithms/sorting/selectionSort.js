@@ -1,4 +1,4 @@
-export async function selectionSort(array, updateArray, setComparingIndices, setSwappingIndices, speed) {
+export async function selectionSort(array, updateArray, setComparingIndices, setSwappingIndices, speedRef) {
   const arr = [...array];
   const n = arr.length;
 
@@ -8,7 +8,7 @@ export async function selectionSort(array, updateArray, setComparingIndices, set
     for (let j = i + 1; j < n; j++) {
       // Highlight comparing elements
       setComparingIndices([minIdx, j]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
 
       if (arr[j] < arr[minIdx]) {
         minIdx = j;
@@ -18,13 +18,13 @@ export async function selectionSort(array, updateArray, setComparingIndices, set
     if (minIdx !== i) {
       // Highlight swapping elements
       setSwappingIndices([i, minIdx]);
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
 
       // Swap elements
       [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
       updateArray([...arr]);
 
-      await new Promise(resolve => setTimeout(resolve, speed));
+      if (speedRef.current > 0) await new Promise(resolve => setTimeout(resolve, speedRef.current));
       setSwappingIndices([]);
     }
 

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import GlassCard from '../components/GlassCard';
+import Navbar from '../components/Navbar';
 import TreeRecursionVisualizer from '../components/TreeRecursionVisualizer';
 import GridBacktrackingVisualizer from '../components/GridBacktrackingVisualizer';
 import TowerOfHanoiVisualizer from '../components/TowerOfHanoiVisualizer';
 import { recursionAlgorithmsData } from '../data/recursionAlgorithms';
 
 const RecursionAlgorithms = () => {
-  // We will divide the 11 algorithms into logical categories
   const categories = [
     {
       name: 'Tree Recursion',
@@ -45,71 +44,74 @@ const RecursionAlgorithms = () => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(categories[0].list[0]);
 
   return (
-    <div className="min-h-screen page-fade-in flex flex-col">
-      {/* Header */}
-      <div className="page-header shrink-0">
-        <div className="container mx-auto flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-gray-300 hover:text-violet-400 transition-colors duration-300">
-            <ArrowLeft size={20} />
-            <span className="font-semibold">Back to Home</span>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white font-sans flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 flex flex-col">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4">
+          <Link to="/algorithms" className="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-indigo-600 font-medium transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Categories
           </Link>
-          <h1 className="text-2xl font-bold text-white">Recursion & Backtracking</h1>
-          <div className="w-32" />
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Recursion & Backtracking</h1>
+          <div className="w-[140px] hidden md:block" />
         </div>
-      </div>
 
-      {/* Category Tabs */}
-      <div className="bg-gray-800 p-2 flex flex-wrap gap-2 justify-center shrink-0">
-        {categories.map((cat, idx) => (
-          <button
-            key={idx}
-            onClick={() => { setSelectedCategory(cat); setSelectedAlgorithm(cat.list[0]); }}
-            className={`px-4 py-1.5 rounded-full font-semibold transition-all duration-300 ${
-              selectedCategory.name === cat.name
-                ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg scale-105'
-                : 'bg-white/5 text-gray-300 hover:bg-white/10'
-            }`}
-          >
-            {cat.name}
-          </button>
-        ))}
-      </div>
+        {/* Category Tabs */}
+        <div className="flex flex-wrap justify-center gap-2 mb-4">
+          {categories.map((cat, idx) => (
+            <button
+              key={idx}
+              onClick={() => { setSelectedCategory(cat); setSelectedAlgorithm(cat.list[0]); }}
+              className={`px-5 py-2.5 rounded-full text-[14px] font-semibold transition-all shadow-sm ${
+                selectedCategory.name === cat.name
+                  ? 'bg-violet-600 text-white shadow-violet-200'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-violet-600'
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
 
-      {/* Algorithm Selector */}
-      <div className="bg-gray-800/80 p-2 flex flex-wrap gap-2 justify-center shrink-0 border-t border-gray-700">
-        {selectedCategory.list.map((algo, idx) => (
-          <button
-            key={idx}
-            onClick={() => setSelectedAlgorithm(algo)}
-            className={`px-3 py-1 rounded text-sm transition-all duration-300 ${
-              selectedAlgorithm.id === algo.id
-                ? 'bg-violet-600/80 text-white shadow border border-violet-400'
-                : 'bg-gray-700/50 text-gray-400 hover:bg-gray-700 hover:text-gray-200 border border-transparent'
-            }`}
-          >
-            {algo.name}
-          </button>
-        ))}
-      </div>
+        {/* Algorithm Sub-selector */}
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          {selectedCategory.list.map((algo, idx) => (
+            <button
+              key={idx}
+              onClick={() => setSelectedAlgorithm(algo)}
+              className={`px-4 py-1.5 rounded-full text-[13px] font-medium transition-all ${
+                selectedAlgorithm.id === algo.id
+                  ? 'bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 border border-violet-300 dark:border-violet-700 shadow-sm'
+                  : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-800'
+              }`}
+            >
+              {algo.name}
+            </button>
+          ))}
+        </div>
 
-      {/* Visualizer Container - takes remaining height */}
-      <div className="flex-1 p-4 flex flex-col overflow-hidden min-h-[600px]">
-        <GlassCard className="flex-1 w-full max-w-7xl mx-auto overflow-hidden flex flex-col shadow-2xl border border-gray-700/50">
-          
+        {/* Visualizer Container */}
+        <div className="flex-1 min-h-[600px] w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden flex flex-col">
           {selectedCategory.type === 'tree' && (
             <TreeRecursionVisualizer algorithmId={selectedAlgorithm.id} />
           )}
-
           {selectedCategory.type === 'grid' && (
             <GridBacktrackingVisualizer algorithmId={selectedAlgorithm.id} />
           )}
-
           {selectedCategory.type === 'puzzle' && (
             <TowerOfHanoiVisualizer algorithmId={selectedAlgorithm.id} />
           )}
+        </div>
+      </main>
 
-        </GlassCard>
-      </div>
+      <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 py-8 mt-auto">
+        <div className="max-w-7xl mx-auto flex items-center gap-2">
+          <img src="/logo-icon.svg" alt="Algo Visualizer" className="w-6 h-6 select-none" draggable="false" />
+          <span className="text-sm font-medium text-slate-500 dark:text-slate-400">© 2025 Algorithm Visualizer.</span>
+        </div>
+      </footer>
     </div>
   );
 };

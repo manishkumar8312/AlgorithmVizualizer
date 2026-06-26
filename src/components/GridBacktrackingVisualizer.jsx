@@ -158,7 +158,7 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
 
     return (
       <div 
-        className="grid gap-1 p-2 bg-gray-800 rounded-lg shadow-2xl border border-gray-700"
+        className="grid gap-1 p-2 bg-white rounded-lg shadow-md border border-slate-200"
         style={{ 
           gridTemplateColumns: `repeat(${m}, minmax(0, 1fr))`,
           maxWidth: Math.min(600, m * 60) + 'px',
@@ -170,37 +170,37 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
           row.map((cell, j) => {
             const isFocused = currentStep.row === i && currentStep.col === j;
             let cellContent = cell;
-            let cellStyle = "bg-gray-700 text-white border-2 border-gray-600";
+            let cellStyle = "bg-slate-50 text-slate-800 border-2 border-slate-200";
             
             if (algorithmId === 'nQueens') {
               cellContent = cell === 'Q' ? '♕' : '';
-              cellStyle = (i + j) % 2 === 0 ? "bg-gray-600" : "bg-gray-700";
-              if (cell === 'Q') cellStyle += " text-3xl text-fuchsia-400";
+              cellStyle = (i + j) % 2 === 0 ? "bg-slate-100" : "bg-white";
+              if (cell === 'Q') cellStyle += " text-3xl text-blue-600";
             } else if (algorithmId === 'sudoku') {
               cellContent = cell === '.' ? '' : cell;
-              cellStyle = "bg-gray-800 text-xl font-semibold border border-gray-600";
+              cellStyle = "bg-white text-xl font-semibold border border-slate-200 text-slate-800";
               // thicker borders for 3x3
-              if (j % 3 === 2 && j !== 8) cellStyle += " border-r-gray-400 border-r-2";
-              if (i % 3 === 2 && i !== 8) cellStyle += " border-b-gray-400 border-b-2";
+              if (j % 3 === 2 && j !== 8) cellStyle += " border-r-slate-400 border-r-2";
+              if (i % 3 === 2 && i !== 8) cellStyle += " border-b-slate-400 border-b-2";
             } else if (algorithmId === 'ratInMaze') {
               cellContent = cell === 1 ? '🐀' : '';
               if (currentStep.maze[i][j] === 0) {
-                cellStyle = "bg-gray-900 border-gray-800"; // wall
+                cellStyle = "bg-slate-800 border-slate-700"; // wall
               } else {
-                cellStyle = "bg-gray-700 border-gray-600"; // path
-                if (cell === 1) cellStyle += " bg-emerald-900/50";
+                cellStyle = "bg-white border-slate-200"; // path
+                if (cell === 1) cellStyle += " bg-emerald-100";
               }
             } else if (algorithmId === 'knightsTour') {
               cellContent = cell === -1 ? '' : cell;
-              cellStyle = (i + j) % 2 === 0 ? "bg-gray-600" : "bg-gray-700";
-              if (cell !== -1) cellStyle += " font-bold text-violet-300 text-lg";
+              cellStyle = (i + j) % 2 === 0 ? "bg-slate-100" : "bg-white";
+              if (cell !== -1) cellStyle += " font-bold text-blue-600 text-lg";
             }
 
             if (isFocused) {
-              if (currentStep.type === 'PLACE') cellStyle += " ring-2 ring-blue-500 ring-inset bg-blue-900/50";
-              else if (currentStep.type === 'TRY') cellStyle += " ring-2 ring-yellow-500 ring-inset bg-yellow-900/50";
-              else if (currentStep.type === 'BACKTRACK') cellStyle += " ring-2 ring-red-500 ring-inset bg-red-900/50";
-              else if (currentStep.type === 'INVALID') cellStyle += " ring-2 ring-orange-500 ring-inset bg-orange-900/50";
+              if (currentStep.type === 'PLACE') cellStyle += " ring-2 ring-blue-500 ring-inset bg-blue-100";
+              else if (currentStep.type === 'TRY') cellStyle += " ring-2 ring-yellow-500 ring-inset bg-yellow-100";
+              else if (currentStep.type === 'BACKTRACK') cellStyle += " ring-2 ring-red-500 ring-inset bg-red-100";
+              else if (currentStep.type === 'INVALID') cellStyle += " ring-2 ring-orange-500 ring-inset bg-orange-100";
             }
 
             return (
@@ -220,7 +220,7 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">{meta.name || "Grid Backtracking"}</h2>
           <p className="text-xs opacity-90 mt-0.5">
@@ -238,28 +238,28 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
       </div>
 
       {/* Controls Bar */}
-      <div className="bg-gray-800 p-3 flex flex-wrap items-center gap-4 border-b border-gray-700">
+      <div className="bg-slate-50 dark:bg-slate-800 p-3 flex flex-wrap items-center gap-4 border-b border-slate-200 dark:border-slate-700">
         
-        <div className="flex items-center gap-2 bg-gray-700 p-1.5 rounded-lg border border-gray-600">
-          <span className="text-gray-300 text-xs font-semibold px-2 border-r border-gray-600">Input</span>
+        <div className="flex items-center gap-2 bg-white dark:bg-slate-700 p-1.5 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm">
+          <span className="text-slate-600 dark:text-slate-300 text-xs font-semibold px-2 border-r border-slate-200 dark:border-slate-600">Input</span>
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             disabled={algorithmId === 'sudoku' || algorithmId === 'ratInMaze'}
             placeholder="Grid size"
-            className="w-32 px-2 py-1 bg-gray-800 text-white rounded border border-transparent focus:border-violet-400 focus:outline-none text-sm disabled:opacity-50"
+            className="w-32 px-2 py-1 bg-slate-50 dark:bg-slate-600 text-slate-800 dark:text-white rounded border border-transparent focus:border-blue-400 focus:outline-none text-sm disabled:opacity-50"
           />
         </div>
 
         <button
           onClick={handleRun}
-          className="flex items-center gap-1.5 bg-violet-500 hover:bg-violet-600 text-white px-4 py-1.5 rounded-lg font-semibold transition-colors text-sm"
+          className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg font-semibold transition-colors text-sm shadow-sm"
         >
           <RotateCcw size={14} /> Run
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={togglePlay}
@@ -281,8 +281,8 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm ${
-            showSettings ? 'bg-fuchsia-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showSettings ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300'
           }`}
         >
           <Settings size={14} /> Speed
@@ -292,15 +292,15 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
 
       {/* Speed settings */}
       {showSettings && (
-        <div className="bg-gray-700 p-3 flex items-center gap-3 border-b border-gray-600">
-          <span className="text-white text-sm font-semibold">Animation Speed</span>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+          <span className="text-slate-700 dark:text-slate-200 text-sm font-semibold">Animation Speed</span>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded text-sm ${
-                  speed === value ? 'bg-fuchsia-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm transition-colors ${
+                  speed === value ? 'bg-blue-600 text-white shadow-sm border-blue-600' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -314,10 +314,13 @@ const GridBacktrackingVisualizer = ({ algorithmId }) => {
       <div className="flex-1 flex overflow-hidden">
         
         {/* Grid View */}
-        <div className="flex-1 flex flex-col items-center justify-center bg-gray-950 relative p-4 overflow-auto custom-scrollbar">
+        <div 
+          className="flex-1 flex flex-col items-center justify-center relative p-4 overflow-auto custom-scrollbar dark:bg-slate-900"
+          style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        >
           {trace.length === 0 ? (
-            <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-lg font-medium select-none">
-              Click <span className="text-violet-400 mx-1">Run</span> to visualize backtracking
+            <div className="absolute inset-0 flex items-center justify-center text-slate-500 dark:text-slate-400 text-lg font-medium select-none">
+              Click <span className="text-blue-600 mx-1">Run</span> to visualize backtracking
             </div>
           ) : (
             renderGrid()

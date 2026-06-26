@@ -1,0 +1,50 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Algo Visualizer</title>
+  <desc id="desc">Blue and green algorithm visualizer logo with a line chart, bars, and wordmark.</desc>
+  <defs>
+    <linearGradient id="brandBlue" x1="160" y1="160" x2="560" y2="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F62FE" />
+      <stop offset="1" stop-color="#1D4ED8" />
+    </linearGradient>
+    <linearGradient id="brandTeal" x1="520" y1="210" x2="910" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#06B6D4" />
+      <stop offset="1" stop-color="#10B981" />
+    </linearGradient>
+    <linearGradient id="brandGreen" x1="690" y1="230" x2="930" y2="540" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2DD4BF" />
+      <stop offset="1" stop-color="#10B981" />
+    </linearGradient>
+    <linearGradient id="wordmarkBlue" x1="340" y1="630" x2="860" y2="940" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B1F57" />
+      <stop offset="1" stop-color="#102B78" />
+    </linearGradient>
+    <filter id="softShadow" x="0" y="0" width="1200" height="900" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="10" stdDeviation="16" flood-color="#0B1F57" flood-opacity="0.14" />
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <path d="M214 540L412 195C429 166 471 166 488 195L566 331L517 390L461 287L314 540H214Z" fill="url(#brandBlue)" />
+    <path d="M432 540L523 378L574 442L501 540H432Z" fill="url(#brandBlue)" />
+    <path d="M607 301L658 336L770 286L844 350L959 176" stroke="url(#brandTeal)" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="658" cy="336" r="20" fill="#0EA5D9" />
+    <circle cx="770" cy="286" r="20" fill="#14B8A6" />
+    <circle cx="844" cy="350" r="20" fill="#34D399" />
+    <circle cx="959" cy="176" r="20" fill="#22C55E" />
+    <rect x="470" y="512" width="38" height="96" rx="8" fill="#2954E6" />
+    <rect x="523" y="476" width="38" height="132" rx="8" fill="#1975E6" />
+    <rect x="576" y="450" width="38" height="158" rx="8" fill="#11A7D7" />
+    <path d="M664 354L713 354L766 385L804 365L847 322L868 302" stroke="url(#brandGreen)" stroke-width="0" />
+    <path d="M639 462L748 462L827 307" stroke="url(#brandGreen)" stroke-width="0" />
+    <path d="M650 352L708 382L763 404L805 364L873 286" stroke="url(#brandGreen)" stroke-width="0" />
+    <path d="M646 346L705 376L756 396L803 364L874 286" stroke="url(#brandGreen)" stroke-width="0" />
+    <path d="M325 540H942" stroke="none" />
+  </g>
+
+  <text x="600" y="706" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="112" font-weight="800" letter-spacing="14" fill="url(#wordmarkBlue)">ALGO</text>
+  <g transform="translate(225 762)">
+    <rect x="0" y="40" width="78" height="6" rx="3" fill="#1D4ED8" />
+    <rect x="804" y="40" width="78" height="6" rx="3" fill="#10B981" />
+    <text x="441" y="58" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="60" font-weight="500" letter-spacing="12" fill="#334155">VISUALIZER</text>
+  </g>
+</svg>

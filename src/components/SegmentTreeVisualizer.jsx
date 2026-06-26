@@ -186,13 +186,13 @@ const SegmentTreeVisualizer = () => {
 
   const logColor = (type) => {
     switch (type) {
-      case 'start': return 'text-blue-400';
-      case 'compare': return 'text-amber-300';
-      case 'success': return 'text-emerald-400';
-      case 'error': return 'text-red-400';
-      case 'warn': return 'text-yellow-400';
+      case 'start': return 'text-blue-600';
+      case 'compare': return 'text-amber-600';
+      case 'success': return 'text-emerald-600';
+      case 'error': return 'text-red-600';
+      case 'warn': return 'text-yellow-600';
       case 'info':
-      default: return 'text-gray-300';
+      default: return 'text-slate-600';
     }
   };
 
@@ -225,9 +225,9 @@ const SegmentTreeVisualizer = () => {
              disabled={isRunning}
              className="bg-white/20 border border-white/30 text-white text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-white transition-colors"
           >
-            <option value={SEG_TYPES.SUM} className="text-black">Sum Tree</option>
-            <option value={SEG_TYPES.MIN} className="text-black">Min Tree</option>
-            <option value={SEG_TYPES.MAX} className="text-black">Max Tree</option>
+            <option value={SEG_TYPES.SUM} className="text-slate-800">Sum Tree</option>
+            <option value={SEG_TYPES.MIN} className="text-slate-800">Min Tree</option>
+            <option value={SEG_TYPES.MAX} className="text-slate-800">Max Tree</option>
           </select>
           <div className="flex flex-wrap gap-2 text-xs">
             <div className="bg-white/20 px-2.5 py-1 rounded-full">
@@ -241,38 +241,38 @@ const SegmentTreeVisualizer = () => {
       </div>
 
       {/* Controls Bar 1: Array Build */}
-      <div className="bg-gray-800 px-4 py-2 flex flex-wrap items-center gap-3 border-b border-gray-700">
-        <span className="text-gray-400 text-xs font-semibold uppercase tracking-wider w-16">Array</span>
+      <div className="bg-slate-50 px-4 py-2 flex flex-wrap items-center gap-3 border-b border-slate-200">
+        <span className="text-slate-500 text-xs font-semibold uppercase tracking-wider w-16">Array</span>
         <input
           type="text"
           value={arrayInput}
           onChange={(e) => setArrayInput(e.target.value)}
           placeholder="e.g. 5, 2, 9, 1, 7"
           disabled={isRunning}
-          className="flex-1 max-w-sm px-3 py-1.5 bg-gray-700 text-white rounded border border-gray-600 focus:border-indigo-400 focus:outline-none text-sm placeholder-gray-400 disabled:opacity-50"
+          className="flex-1 max-w-sm px-3 py-1.5 bg-white text-slate-800 rounded border border-slate-200 focus:border-indigo-400 focus:outline-none text-sm placeholder-slate-400 disabled:opacity-50 shadow-sm"
         />
         <button
           onClick={handleBuildUserArray}
           disabled={isRunning}
-          className="bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-600 text-white px-3 py-1.5 rounded text-sm font-semibold transition-colors"
+          className="bg-indigo-500 hover:bg-indigo-600 disabled:bg-slate-200 disabled:text-slate-500 text-white px-3 py-1.5 rounded text-sm font-semibold transition-colors"
         >
           Build
         </button>
         <button
           onClick={handleRandomArray}
           disabled={isRunning}
-          className="flex items-center gap-1.5 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-600 text-white px-3 py-1.5 rounded text-sm font-semibold transition-colors"
+          className="flex items-center gap-1.5 bg-purple-500 hover:bg-purple-600 disabled:bg-slate-200 disabled:text-slate-500 text-white px-3 py-1.5 rounded text-sm font-semibold transition-colors"
         >
           <Shuffle size={14} /> Random
         </button>
       </div>
 
       {/* Controls Bar 2: Operations */}
-      <div className="bg-gray-800 p-3 flex flex-wrap items-center gap-4">
+      <div className="bg-slate-50 border-b border-slate-200 p-3 flex flex-wrap items-center gap-4">
         
         {/* Point Update */}
-        <div className="flex items-center gap-2 bg-gray-700 p-1.5 rounded-lg border border-gray-600">
-          <span className="text-gray-300 text-xs font-semibold px-2 border-r border-gray-600">Point Update</span>
+        <div className="flex items-center gap-2 bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm">
+          <span className="text-slate-600 text-xs font-semibold px-2 border-r border-slate-200">Point Update</span>
           <input
             type="number"
             min={0}
@@ -281,7 +281,7 @@ const SegmentTreeVisualizer = () => {
             onChange={(e) => setUpdateIdx(e.target.value)}
             placeholder="Idx"
             disabled={isRunning}
-            className="w-14 px-2 py-1 bg-gray-800 text-white rounded border border-transparent focus:border-blue-400 focus:outline-none text-sm"
+            className="w-14 px-2 py-1 bg-slate-50 text-slate-800 rounded border border-slate-200 focus:border-blue-400 focus:outline-none text-sm placeholder-slate-400"
           />
           <input
             type="number"
@@ -289,20 +289,20 @@ const SegmentTreeVisualizer = () => {
             onChange={(e) => setUpdateVal(e.target.value)}
             placeholder="Val"
             disabled={isRunning}
-            className="w-16 px-2 py-1 bg-gray-800 text-white rounded border border-transparent focus:border-blue-400 focus:outline-none text-sm"
+            className="w-16 px-2 py-1 bg-slate-50 text-slate-800 rounded border border-slate-200 focus:border-blue-400 focus:outline-none text-sm placeholder-slate-400"
           />
           <button
             onClick={handleUpdate}
             disabled={isRunning || updateIdx === '' || updateVal === ''}
-            className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 text-white px-3 py-1 rounded text-sm font-semibold transition-colors"
+            className="bg-blue-500 hover:bg-blue-600 disabled:bg-slate-200 disabled:text-slate-500 text-white px-3 py-1 rounded text-sm font-semibold transition-colors"
           >
             Update
           </button>
         </div>
 
         {/* Range Query */}
-        <div className="flex items-center gap-2 bg-gray-700 p-1.5 rounded-lg border border-gray-600">
-          <span className="text-gray-300 text-xs font-semibold px-2 border-r border-gray-600">Range Query</span>
+        <div className="flex items-center gap-2 bg-white p-1.5 rounded-lg border border-slate-200 shadow-sm">
+          <span className="text-slate-600 text-xs font-semibold px-2 border-r border-slate-200">Range Query</span>
           <input
             type="number"
             min={0}
@@ -311,7 +311,7 @@ const SegmentTreeVisualizer = () => {
             onChange={(e) => setQueryL(e.target.value)}
             placeholder="L"
             disabled={isRunning}
-            className="w-14 px-2 py-1 bg-gray-800 text-white rounded border border-transparent focus:border-emerald-400 focus:outline-none text-sm"
+            className="w-14 px-2 py-1 bg-slate-50 text-slate-800 rounded border border-slate-200 focus:border-emerald-400 focus:outline-none text-sm placeholder-slate-400"
           />
           <input
             type="number"
@@ -321,12 +321,12 @@ const SegmentTreeVisualizer = () => {
             onChange={(e) => setQueryR(e.target.value)}
             placeholder="R"
             disabled={isRunning}
-            className="w-14 px-2 py-1 bg-gray-800 text-white rounded border border-transparent focus:border-emerald-400 focus:outline-none text-sm"
+            className="w-14 px-2 py-1 bg-slate-50 text-slate-800 rounded border border-slate-200 focus:border-emerald-400 focus:outline-none text-sm placeholder-slate-400"
           />
           <button
             onClick={handleQuery}
             disabled={isRunning || queryL === '' || queryR === ''}
-            className="flex items-center gap-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-600 text-white px-3 py-1 rounded text-sm font-semibold transition-colors"
+            className="flex items-center gap-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-200 disabled:text-slate-500 text-white px-3 py-1 rounded text-sm font-semibold transition-colors"
           >
             <Play size={14} /> Query
           </button>
@@ -336,8 +336,8 @@ const SegmentTreeVisualizer = () => {
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm ${
-            showSettings ? 'bg-indigo-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showSettings ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-600'
           }`}
         >
           <Settings size={14} /> Speed
@@ -345,8 +345,8 @@ const SegmentTreeVisualizer = () => {
 
         <button
           onClick={() => setShowExplanation(!showExplanation)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm ${
-            showExplanation ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showExplanation ? 'bg-blue-100 border-blue-300 text-blue-700' : 'bg-white border-slate-200 hover:bg-slate-50 text-slate-600'
           }`}
         >
           <MessageSquare size={14} /> Log
@@ -355,15 +355,15 @@ const SegmentTreeVisualizer = () => {
 
       {/* Speed settings */}
       {showSettings && (
-        <div className="bg-gray-700 p-3 flex items-center gap-3">
-          <span className="text-white text-sm font-semibold">Animation Speed</span>
+        <div className="bg-slate-100 p-3 flex items-center gap-3 border-b border-slate-200">
+          <span className="text-slate-700 text-sm font-semibold">Animation Speed</span>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded text-sm ${
-                  speed === value ? 'bg-indigo-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm transition-colors ${
+                  speed === value ? 'bg-blue-600 text-white shadow-sm border-blue-600' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -377,14 +377,14 @@ const SegmentTreeVisualizer = () => {
       <div className="flex-1 flex overflow-hidden">
         
         {/* Visualizations Container */}
-        <div className="flex-1 flex flex-col bg-gray-950 overflow-hidden relative">
+        <div className="flex-1 flex flex-col bg-slate-50 overflow-hidden relative">
           
           {/* Base Array Representation */}
-          <div className="h-20 border-b border-gray-800 flex flex-col items-center justify-center p-2">
-            <div className="text-gray-400 text-[10px] font-semibold mb-1 tracking-wider uppercase">Base Array</div>
+          <div className="h-20 border-b border-slate-200 flex flex-col items-center justify-center p-2 bg-white">
+            <div className="text-slate-500 text-[10px] font-semibold mb-1 tracking-wider uppercase">Base Array</div>
             <div className="flex items-center gap-1.5 overflow-x-auto w-full px-4 justify-center">
               {baseArray.length === 0 ? (
-                 <span className="text-gray-600 text-sm">Empty</span>
+                 <span className="text-slate-400 text-sm">Empty</span>
               ) : (
                 baseArray.map((val, idx) => {
                   // Determine if this array element is part of the current operation
@@ -396,10 +396,10 @@ const SegmentTreeVisualizer = () => {
                   
                   return (
                     <div key={`arr-${idx}`} className="flex flex-col items-center">
-                      <div className={`w-10 h-10 flex items-center justify-center border-2 rounded ${isTarget ? 'bg-indigo-900/50 border-indigo-500 text-white scale-110' : 'bg-gray-800 border-gray-600 text-gray-300'} font-mono font-bold transition-all duration-300`}>
+                      <div className={`w-10 h-10 flex items-center justify-center border-2 rounded ${isTarget ? 'bg-indigo-100 border-indigo-500 text-indigo-700 scale-110' : 'bg-slate-50 border-slate-200 text-slate-700'} font-mono font-bold transition-all duration-300`}>
                         {val}
                       </div>
-                      <div className="text-gray-500 text-[10px] mt-1">{idx}</div>
+                      <div className="text-slate-400 text-[10px] mt-1">{idx}</div>
                     </div>
                   );
                 })
@@ -408,10 +408,13 @@ const SegmentTreeVisualizer = () => {
           </div>
 
           {/* SVG Tree */}
-          <div className="flex-1 overflow-auto relative p-4">
+          <div 
+            className="flex-1 overflow-auto relative p-4"
+            style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+          >
              {baseArray.length === 0 ? (
-               <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-lg font-medium select-none">
-                 Enter an array and click <span className="text-indigo-400 mx-1">Build</span>
+               <div className="absolute inset-0 flex items-center justify-center text-slate-500 text-lg font-medium select-none">
+                 Enter an array and click <span className="text-indigo-600 mx-1">Build</span>
                </div>
              ) : (
                 <div style={{ minWidth: treeData.svgWidth || 800, minHeight: treeData.svgHeight || 460 }} className="flex items-center justify-center h-full">
@@ -421,8 +424,8 @@ const SegmentTreeVisualizer = () => {
                       <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#000" floodOpacity="0.4" />
                     </filter>
                     <radialGradient id="seg-grad-default" cx="35%" cy="30%" r="65%">
-                      <stop offset="0%" stopColor="#818cf8" />
-                      <stop offset="100%" stopColor="#4f46e5" />
+                      <stop offset="0%" stopColor="#60a5fa" />
+                      <stop offset="100%" stopColor="#2563eb" />
                     </radialGradient>
                     <radialGradient id="seg-grad-active" cx="35%" cy="30%" r="65%">
                       <stop offset="0%" stopColor="#fcd34d" />
@@ -455,7 +458,7 @@ const SegmentTreeVisualizer = () => {
                         y1={edge.from.y}
                         x2={edge.to.x}
                         y2={edge.to.y}
-                        stroke={isActivePath ? '#fcd34d' : '#475569'}
+                        stroke={isActivePath ? '#fbbf24' : '#cbd5e1'}
                         strokeWidth={isActivePath ? 4 : 2}
                         className="transition-all duration-300"
                       />
@@ -522,14 +525,14 @@ const SegmentTreeVisualizer = () => {
                            width={40}
                            height={16}
                            rx={4}
-                           fill="#1e293b"
+                           fill="#e2e8f0"
                            opacity={0.9}
                         />
                         <text
                           x={node.x}
                           y={node.y + 35}
                           textAnchor="middle"
-                          fill="#94a3b8"
+                          fill="#64748b"
                           fontSize="10"
                           fontWeight="700"
                           fontFamily="monospace"
@@ -547,20 +550,20 @@ const SegmentTreeVisualizer = () => {
 
         {/* Right Side: Log Panel */}
         {showExplanation && (
-          <div className="w-80 bg-gray-900 border-l border-gray-700 flex flex-col">
-            <div className="px-4 py-3 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-              <MessageSquare size={16} className="text-blue-400" />
-              <span className="text-white font-semibold text-sm">Algorithm Log</span>
+          <div className="w-80 bg-white border-l border-slate-200 flex flex-col">
+            <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+              <MessageSquare size={16} className="text-blue-500" />
+              <span className="text-slate-800 font-semibold text-sm">Algorithm Log</span>
               <button
                 onClick={() => setLogs([])}
-                className="ml-auto text-xs text-gray-400 hover:text-white transition-colors"
+                className="ml-auto text-xs text-slate-500 hover:text-slate-800 transition-colors"
               >
                 Clear
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-3 space-y-1.5 text-xs font-mono">
               {logs.length === 0 && (
-                <p className="text-gray-500 text-center mt-6">
+                <p className="text-slate-500 text-center mt-6">
                   Perform an operation to see step‑by‑step logs here.
                 </p>
               )}
@@ -577,22 +580,22 @@ const SegmentTreeVisualizer = () => {
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg border-t border-gray-700">
+      <div className="bg-slate-50 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg border-t border-slate-200">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#6366f1' }} />
-          <span className="text-white">Idle Node</span>
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3b82f6' }} />
+          <span className="text-slate-600">Idle Node</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#eab308' }} />
-          <span className="text-white">Active Path</span>
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#facc15' }} />
+          <span className="text-slate-600">Active Path</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10b981' }} />
-          <span className="text-white">Contributing (Query)</span>
+          <span className="text-slate-600">Contributing (Query)</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3b82f6' }} />
-          <span className="text-white">Propagating (Update)</span>
+          <span className="text-slate-600">Propagating (Update)</span>
         </div>
       </div>
     </div>

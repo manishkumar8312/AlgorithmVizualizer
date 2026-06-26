@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, Shuffle, Settings, BookOpen, Code2, BarChart3, GraduationCap, FileText, Layers } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, Pause, Shuffle, Settings, BookOpen, Code2, FileText, SkipForward } from 'lucide-react';
 import { generateRandomArray, SPEED_PRESETS, COLORS } from '../utils/animationHelpers';
-import { StepTracker, bubbleSortStepByStep } from '../utils/stepTracker';
 import StepControls from './educational/StepControls';
 import ExplanationPanel from './educational/ExplanationPanel';
 import CodeViewer from './educational/CodeViewer';
 import CustomTestCases from './educational/CustomTestCases';
-import ComparisonMode from './educational/ComparisonMode';
 import { algorithmDatabase } from '../data/algorithmData';
 
 const SortingVisualizer = ({ algorithm, algorithmInfo }) => {
@@ -14,168 +12,153 @@ const SortingVisualizer = ({ algorithm, algorithmInfo }) => {
   const [comparingIndices, setComparingIndices] = useState([]);
   const [swappingIndices, setSwappingIndices] = useState([]);
   const [sortedIndices, setSortedIndices] = useState([]);
-  const [isSorting, setIsSorting] = useState(false);
-  const [arraySize, setArraySize] = useState(50);
-  const [speed, setSpeed] = useState(SPEED_PRESETS.FAST);
-  const [showSettings, setShowSettings] = useState(false);
   
-  // Educational features state
-  const [stepMode, setStepMode] = useState(false);
+  const [arraySize, setArraySize] = useState(40);
+  const [speed, setSpeed] = useState(SPEED_PRESETS.FAST);
+  
+  const [showSettings, setShowSettings] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
   const [showCodeViewer, setShowCodeViewer] = useState(false);
   const [showCustomTest, setShowCustomTest] = useState(false);
-  const [showComparison, setShowComparison] = useState(false);
   
-  // Step tracking state
-  const [stepTracker, setStepTracker] = useState(new StepTracker());
-  const [currentStep, setCurrentStep] = useState(null);
+  // Playback state
+  const [steps, setSteps] = useState([]);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  
-  // Performance metrics
-  const [performanceMetrics, setPerformanceMetrics] = useState({
-    executionTime: 0,
-    comparisons: 0,
-    swaps: 0,
-    memoryUsage: 0,
-    history: []
-  });
+  const [isSorting, setIsSorting] = useState(false); // true while pre-computing
 
   useEffect(() => {
     resetArray();
-  }, [arraySize]);
+  }, [arraySize, algorithmInfo.name]);
 
   const resetArray = (customArray = null) => {
-    if (!isSorting) {
-      const newArray = customArray || generateRandomArray(arraySize);
-      setArray(newArray);
-      setComparingIndices([]);
-      setSwappingIndices([]);
-      setSortedIndices([]);
-      stepTracker.reset();
-      setCurrentStep(null);
-      setIsPlaying(false);
-      setIsPaused(false);
-    }
+    setIsPlaying(false);
+    setIsPaused(false);
+    setSteps([]);
+    setCurrentStepIndex(0);
+    
+    const newArray = customArray || generateRandomArray(arraySize);
+    setArray(newArray);
+    setComparingIndices([]);
+    setSwappingIndices([]);
+    setSortedIndices([]);
   };
 
   const handleSort = async () => {
-    if (isSorting) return;
-    
-    if (stepMode) {
-      // Step-by-step execution
-      await handleStepSort();
-    } else {
-      // Normal execution
-      await handleNormalSort();
+    if (steps.length > 0 && currentStepIndex === 0) {
+      // If we already have steps computed and we're at the start, just play
+      setIsPlaying(true);
+      setIsPaused(false);
+      return;
     }
-  };
-
-  const handleNormalSort = async () => {
+    
+    // Otherwise, generate the steps
     setIsSorting(true);
-    setComparingIndices([]);
-    setSwappingIndices([]);
-    setSortedIndices([]);
+    
+    const generatedSteps = [];
+    let currentArrayState = [...array];
+    let currentComparing = [];
+    let currentSwapping = [];
 
-    const startTime = Date.now();
+    const addStep = (arr, comp, swap) => {
+      generatedSteps.push({
+        arrayState: [...(arr || currentArrayState)],
+        comparingIndices: [...(comp || currentComparing)],
+        swappingIndices: [...(swap || currentSwapping)],
+        isSorted: false
+      });
+    };
+
+    const proxyUpdateArray = (newArr) => {
+      currentArrayState = [...newArr];
+      addStep(currentArrayState, currentComparing, currentSwapping);
+    };
+
+    const proxySetComparing = (indices) => {
+      currentComparing = [...indices];
+      addStep(currentArrayState, currentComparing, currentSwapping);
+    };
+
+    const proxySetSwapping = (indices) => {
+      currentSwapping = [...indices];
+      addStep(currentArrayState, currentComparing, currentSwapping);
+    };
+
+    const instantSpeedRef = { current: 0 };
+    
+    // Add initial step
+    addStep(array, [], []);
+
+    // Wait slightly to let UI update to sorting state (showing loading if needed)
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    // Pre-compute all steps instantly
     await algorithm(
       array,
-      setArray,
-      setComparingIndices,
-      setSwappingIndices,
-      speed
+      proxyUpdateArray,
+      proxySetComparing,
+      proxySetSwapping,
+      instantSpeedRef
     );
-    const endTime = Date.now();
 
-    // Update performance metrics
-    setPerformanceMetrics(prev => ({
-      ...prev,
-      executionTime: endTime - startTime,
-      history: [...prev.history, { run: prev.history.length + 1, time: endTime - startTime, comparisons: Math.floor(Math.random() * 100) }]
-    }));
+    // Add final sorted state step
+    generatedSteps.push({
+      arrayState: [...currentArrayState],
+      comparingIndices: [],
+      swappingIndices: [],
+      isSorted: true
+    });
 
-    // Mark all as sorted
-    setSortedIndices(array.map((_, idx) => idx));
-    setComparingIndices([]);
-    setSwappingIndices([]);
+    setSteps(generatedSteps);
+    setCurrentStepIndex(0);
     setIsSorting(false);
-  };
-
-  const handleStepSort = async () => {
-    setIsSorting(true);
-    setComparingIndices([]);
-    setSwappingIndices([]);
-    setSortedIndices([]);
     
-    const newTracker = new StepTracker();
-    setStepTracker(newTracker);
-    
-    await bubbleSortStepByStep(
-      array,
-      setArray,
-      setComparingIndices,
-      setSwappingIndices,
-      speed,
-      newTracker
-    );
-    
-    setCurrentStep(newTracker.getCurrentStep());
-    
-    // Mark all as sorted
-    setSortedIndices(array.map((_, idx) => idx));
-    setComparingIndices([]);
-    setSwappingIndices([]);
-    setIsSorting(false);
-  };
-
-  const handleStepNext = () => {
-    const next = stepTracker.nextStep();
-    if (next) {
-      setCurrentStep(next);
-      setArray(next.arrayState);
-      if (next.operation === 'compare') {
-        setComparingIndices(next.indices);
-      } else if (next.operation === 'swap') {
-        setSwappingIndices(next.indices);
-      }
-      setTimeout(() => {
-        setComparingIndices([]);
-        setSwappingIndices([]);
-      }, 200);
-    }
-  };
-
-  const handleStepPrevious = () => {
-    const prev = stepTracker.previousStep();
-    if (prev) {
-      setCurrentStep(prev);
-      setArray(prev.arrayState);
-      if (prev.operation === 'compare') {
-        setComparingIndices(prev.indices);
-      } else if (prev.operation === 'swap') {
-        setSwappingIndices(prev.indices);
-      }
-    }
-  };
-
-  const handleStepPlay = () => {
+    // Automatically start playing
     setIsPlaying(true);
     setIsPaused(false);
-    const playInterval = setInterval(() => {
-      const next = stepTracker.nextStep();
-      if (next) {
-        setCurrentStep(next);
-        setArray(next.arrayState);
-        if (next.operation === 'compare') {
-          setComparingIndices(next.indices);
-        } else if (next.operation === 'swap') {
-          setSwappingIndices(next.indices);
-        }
+  };
+
+  // Playback effect loop
+  useEffect(() => {
+    let timeoutId;
+    if (isPlaying && !isPaused && currentStepIndex < steps.length - 1) {
+      timeoutId = setTimeout(() => {
+        applyStep(currentStepIndex + 1);
+      }, speed);
+    } else if (isPlaying && currentStepIndex >= steps.length - 1 && steps.length > 0) {
+      setIsPlaying(false);
+      setIsPaused(false);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isPlaying, isPaused, currentStepIndex, steps, speed]);
+
+  const applyStep = (index) => {
+    if (index >= 0 && index < steps.length) {
+      setCurrentStepIndex(index);
+      const step = steps[index];
+      setArray(step.arrayState);
+      setComparingIndices(step.comparingIndices);
+      setSwappingIndices(step.swappingIndices);
+      if (step.isSorted) {
+         setSortedIndices(step.arrayState.map((_, i) => i));
       } else {
-        clearInterval(playInterval);
-        setIsPlaying(false);
+         setSortedIndices([]);
       }
-    }, speed);
+    }
+  };
+
+  // Playback control handlers
+  const handleStepPlay = () => {
+    if (steps.length === 0) {
+      handleSort();
+    } else {
+      if (currentStepIndex >= steps.length - 1) {
+        applyStep(0);
+      }
+      setIsPlaying(true);
+      setIsPaused(false);
+    }
   };
 
   const handleStepPause = () => {
@@ -183,12 +166,28 @@ const SortingVisualizer = ({ algorithm, algorithmInfo }) => {
     setIsPaused(true);
   };
 
+  const handleStepNext = () => {
+    setIsPlaying(false);
+    setIsPaused(true);
+    if (currentStepIndex < steps.length - 1) {
+      applyStep(currentStepIndex + 1);
+    }
+  };
+
+  const handleStepPrevious = () => {
+    setIsPlaying(false);
+    setIsPaused(true);
+    if (currentStepIndex > 0) {
+      applyStep(currentStepIndex - 1);
+    }
+  };
+
   const handleStepReset = () => {
-    stepTracker.reset();
-    setCurrentStep(stepTracker.getCurrentStep());
     setIsPlaying(false);
     setIsPaused(false);
-    resetArray();
+    if (steps.length > 0) {
+      applyStep(0);
+    }
   };
 
   const handleCustomTest = (testArray) => {
@@ -209,118 +208,113 @@ const SortingVisualizer = ({ algorithm, algorithmInfo }) => {
   };
 
   const getBarColor = (index) => {
-    if (sortedIndices.includes(index)) return COLORS.SORTED;
-    if (swappingIndices.includes(index)) return COLORS.SWAPPING;
-    if (comparingIndices.includes(index)) return COLORS.COMPARING;
-    return COLORS.DEFAULT;
+    if (sortedIndices.includes(index)) return COLORS.SORTED || '#fb923c';
+    if (swappingIndices.includes(index)) return COLORS.SWAPPING || '#f43f5e';
+    if (comparingIndices.includes(index)) return COLORS.COMPARING || '#f472b6';
+    return COLORS.DEFAULT || '#a5b4fc';
   };
 
   const maxValue = Math.max(...array);
 
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Algorithm Info */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-lg shadow-lg">
-        <h2 className="text-3xl font-bold mb-2">{algorithmInfo.name}</h2>
-        <div className="flex flex-wrap gap-4 text-sm">
-          <div className="bg-white/20 px-3 py-1 rounded-full">
-            <span className="font-semibold">Time:</span> {algorithmInfo.timeComplexity}
+    <div className="w-full h-full flex flex-col bg-white dark:bg-slate-900 rounded-3xl overflow-hidden">
+      {/* Algorithm Info Header */}
+      <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-6 py-5">
+        <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">
+          {algorithmInfo.name}
+        </h2>
+        <div className="flex flex-wrap gap-3 text-xs mb-3">
+          <div className="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md font-medium border border-indigo-100">
+            <span className="font-bold opacity-75 mr-1">Time:</span> {algorithmInfo.timeComplexity}
           </div>
-          <div className="bg-white/20 px-3 py-1 rounded-full">
-            <span className="font-semibold">Space:</span> {algorithmInfo.spaceComplexity}
+          <div className="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md font-medium border border-indigo-100">
+            <span className="font-bold opacity-75 mr-1">Space:</span> {algorithmInfo.spaceComplexity}
           </div>
         </div>
-        <p className="mt-3 text-sm opacity-90">{algorithmInfo.description}</p>
+        <p className="text-[13px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-4xl">
+          {algorithmInfo.description}
+        </p>
       </div>
 
-      {/* Controls */}
-      <div className="bg-gray-800 p-4 flex flex-wrap items-center gap-3">
-        <button
-          onClick={handleSort}
-          disabled={isSorting}
-          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-        >
-          <Play size={18} />
-          {stepMode ? 'Start Step Mode' : 'Sort'}
-        </button>
+      {/* Action Controls Bar */}
+      <div className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-wrap items-center gap-3">
+        {/* If steps exist, the StepControls handle play/pause. Otherwise, show a main Sort button */}
+        {steps.length === 0 && (
+          <button
+            onClick={handleSort}
+            disabled={isSorting}
+            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 dark:disabled:bg-slate-600 disabled:cursor-not-allowed text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-sm shadow-indigo-600/20"
+          >
+            <Play className="w-4 h-4 ml-0.5" />
+            {isSorting ? 'Generating...' : 'Sort'}
+          </button>
+        )}
 
         <button
           onClick={() => resetArray()}
-          disabled={isSorting}
-          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          className="flex items-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm"
         >
-          <Shuffle size={18} />
+          <Shuffle className="w-4 h-4 text-slate-500 dark:text-slate-400" />
           New Array
         </button>
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
-            showSettings ? 'bg-purple-600 text-white' : 'bg-purple-500 hover:bg-purple-600 text-white'
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm border ${
+            showSettings 
+              ? 'bg-purple-100 border-purple-200 text-purple-700 dark:bg-purple-900/40 dark:border-purple-700 dark:text-purple-300' 
+              : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
           }`}
         >
-          <Settings size={18} />
+          <Settings className={`w-4 h-4 ${showSettings ? 'text-purple-600 dark:text-purple-400' : 'text-slate-500 dark:text-slate-400'}`} />
           Settings
         </button>
 
-        {/* Educational Feature Toggles */}
-        <div className="h-6 w-px bg-gray-600 mx-2" />
+        <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
 
-        <button
-          onClick={() => setStepMode(!stepMode)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-colors ${
-            stepMode ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
-          }`}
-          title="Step-by-Step Mode"
-        >
-          <Layers size={18} />
-          Steps
-        </button>
-
+        {/* Educational Tools */}
         <button
           onClick={() => setShowExplanation(!showExplanation)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-colors ${
-            showExplanation ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
+            showExplanation ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-transparent'
           }`}
-          title="Algorithm Explanation"
         >
-          <BookOpen size={18} />
+          <BookOpen className="w-4 h-4 opacity-80" />
           Info
         </button>
 
         <button
           onClick={() => setShowCodeViewer(!showCodeViewer)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-colors ${
-            showCodeViewer ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
+            showCodeViewer ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-transparent'
           }`}
-          title="Code Viewer"
         >
-          <Code2 size={18} />
+          <Code2 className="w-4 h-4 opacity-80" />
           Code
         </button>
 
         <button
           onClick={() => setShowCustomTest(!showCustomTest)}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-colors ${
-            showCustomTest ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
+            showCustomTest ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-transparent'
           }`}
-          title="Custom Test Cases"
         >
-          <FileText size={18} />
+          <FileText className="w-4 h-4 opacity-80" />
           Test
         </button>
 
-        <div className="ml-auto text-white text-sm">
-          <span className="font-semibold">Array Size:</span> {arraySize}
+        <div className="ml-auto flex items-center gap-2 text-[13px] text-slate-500 dark:text-slate-400 font-medium bg-white dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm">
+          <span>Array Size:</span> 
+          <span className="text-slate-900 dark:text-white font-bold">{arraySize}</span>
         </div>
       </div>
 
-      {/* Settings Panel */}
+      {/* Inline Settings Panel */}
       {showSettings && (
-        <div className="bg-gray-700 p-4 space-y-4">
-          <div>
-            <label className="text-white text-sm font-semibold mb-2 block">
-              Array Size: {arraySize}
+        <div className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-6 shadow-inner flex flex-wrap gap-10">
+          <div className="flex-1 min-w-[200px]">
+            <label className="text-slate-700 dark:text-slate-200 text-sm font-bold mb-3 flex justify-between">
+              Array Size <span>{arraySize}</span>
             </label>
             <input
               type="range"
@@ -328,89 +322,89 @@ const SortingVisualizer = ({ algorithm, algorithmInfo }) => {
               max="100"
               value={arraySize}
               onChange={(e) => setArraySize(Number(e.target.value))}
-              disabled={isSorting}
-              className="w-full"
+              disabled={isPlaying}
+              className="w-full accent-indigo-600 cursor-pointer"
             />
           </div>
 
-          <div>
-            <label className="text-white text-sm font-semibold mb-2 block">
-              Animation Speed
+          <div className="flex-1 min-w-[250px]">
+            <label className="text-slate-700 dark:text-slate-200 text-sm font-bold mb-3 flex justify-between">
+              Animation Speed <span>{speed < 50 ? 'Fast' : speed > 200 ? 'Slow' : 'Medium'}</span>
             </label>
-            <div className="flex gap-2">
-              {Object.entries(SPEED_PRESETS).map(([name, value]) => (
-                <button
-                  key={name}
-                  onClick={() => setSpeed(value)}
-                  className={`px-3 py-1 rounded ${
-                    speed === value
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
-                  }`}
-                >
-                  {name.replace('_', ' ')}
-                </button>
-              ))}
+            <input
+              type="range"
+              min="1"
+              max="1000"
+              value={1001 - speed}
+              onChange={(e) => setSpeed(1001 - Number(e.target.value))}
+              className="w-full accent-purple-600 cursor-pointer"
+            />
+            <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">
+              <span>Slow</span>
+              <span>Fast</span>
             </div>
           </div>
         </div>
       )}
 
-      {/* Step Controls (when in step mode) */}
-      {stepMode && currentStep && (
-        <StepControls
-          currentStep={stepTracker.getProgress().current}
-          totalSteps={stepTracker.getTotalSteps()}
-          isPlaying={isPlaying}
-          isPaused={isPaused}
-          onPlay={handleStepPlay}
-          onPause={handleStepPause}
-          onResume={handleStepPlay}
-          onNext={handleStepNext}
-          onPrevious={handleStepPrevious}
-          onReset={handleStepReset}
-          disabled={isSorting}
-        />
+      {/* Step Controls Toolbar */}
+      {steps.length > 0 && (
+        <div>
+          <StepControls
+            currentStep={currentStepIndex + 1}
+            totalSteps={steps.length}
+            isPlaying={isPlaying}
+            isPaused={isPaused}
+            onPlay={handleStepPlay}
+            onPause={handleStepPause}
+            onResume={handleStepPlay}
+            onNext={handleStepNext}
+            onPrevious={handleStepPrevious}
+            onReset={handleStepReset}
+          />
+        </div>
       )}
 
-      {/* Visualization Area */}
-      <div className="flex-1 bg-gray-900 p-4 flex items-end justify-center gap-[2px] overflow-hidden relative">
-        {array.map((value, idx) => (
-          <div
-            key={idx}
-            className="transition-all duration-75"
-            style={{
-              height: `${(value / maxValue) * 100}%`,
-              width: `${100 / array.length}%`,
-              backgroundColor: getBarColor(idx),
-              minWidth: '2px',
-            }}
-            title={`Value: ${value}, Index: ${idx}`}
-          />
-        ))}
-      </div>
-
-      {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: COLORS.DEFAULT }}></div>
-          <span className="text-white">Unsorted</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: COLORS.COMPARING }}></div>
-          <span className="text-white">Comparing</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: COLORS.SWAPPING }}></div>
-          <span className="text-white">Swapping</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: COLORS.SORTED }}></div>
-          <span className="text-white">Sorted</span>
+      {/* Main Visualization Area */}
+      <div className="flex-1 bg-white dark:bg-slate-900 relative min-h-[400px] overflow-hidden">
+        <div className="absolute inset-0 px-6 pt-6 pb-2 flex items-end justify-center gap-[2px]">
+          {array.map((value, idx) => (
+            <div
+              key={idx}
+              className="transition-all duration-75 rounded-t-sm"
+              style={{
+                height: `${(value / maxValue) * 85}%`,
+                width: `${100 / array.length}%`,
+                backgroundColor: getBarColor(idx),
+                minWidth: '2px',
+              }}
+              title={`Value: ${value}, Index: ${idx}`}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Educational Panels */}
+      {/* Legend Footer */}
+      <div className="bg-slate-50 dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-wrap gap-6 justify-center text-[12px] font-medium text-slate-600 dark:text-slate-300">
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: COLORS.DEFAULT || '#a5b4fc' }}></div>
+          <span>Unsorted</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: COLORS.COMPARING || '#f472b6' }}></div>
+          <span>Comparing</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: COLORS.SWAPPING || '#f43f5e' }}></div>
+          <span>Swapping</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3.5 h-3.5 rounded-sm" style={{ backgroundColor: COLORS.SORTED || '#fb923c' }}></div>
+          <span>Sorted</span>
+        </div>
+      </div>
+
+      {/* Educational Modals/Overlays */}
       <ExplanationPanel
         algorithmInfo={getAlgorithmData(algorithmInfo.name) || algorithmInfo}
         isOpen={showExplanation}
@@ -418,7 +412,7 @@ const SortingVisualizer = ({ algorithm, algorithmInfo }) => {
       />
 
       {showCodeViewer && (
-        <div className="fixed bottom-0 right-0 h-3/4 w-[500px] bg-gray-900 border-t border-l border-gray-700 z-50 shadow-2xl">
+        <div className="fixed bottom-0 right-0 h-3/4 w-[500px] bg-white dark:bg-slate-900 border-t border-l border-slate-200 dark:border-slate-700 z-50 shadow-2xl rounded-tl-2xl overflow-hidden">
           <CodeViewer
             codeSnippets={getAlgorithmData(algorithmInfo.name)?.codeSnippets}
             isOpen={showCodeViewer}
@@ -428,7 +422,7 @@ const SortingVisualizer = ({ algorithm, algorithmInfo }) => {
       )}
 
       {showCustomTest && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 z-40 max-h-96 overflow-y-auto">
+        <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 z-40 max-h-96 overflow-y-auto shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
           <CustomTestCases
             onApplyTest={handleCustomTest}
             isOpen={showCustomTest}

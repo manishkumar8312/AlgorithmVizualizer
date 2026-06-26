@@ -202,15 +202,15 @@ const AVLVisualizer = () => {
 
   const logColor = (type) => {
     switch (type) {
-      case 'start':    return 'text-blue-400';
-      case 'compare':  return 'text-amber-300';
-      case 'success':  return 'text-emerald-400';
-      case 'error':    return 'text-red-400';
-      case 'warn':     return 'text-yellow-400';
-      case 'delete':   return 'text-rose-400';
-      case 'rotation': return 'text-orange-400';
+      case 'start':    return 'text-blue-600';
+      case 'compare':  return 'text-amber-600';
+      case 'success':  return 'text-emerald-600';
+      case 'error':    return 'text-red-600';
+      case 'warn':     return 'text-yellow-600';
+      case 'delete':   return 'text-rose-600';
+      case 'rotation': return 'text-orange-600';
       case 'info':
-      default:         return 'text-gray-300';
+      default:         return 'text-slate-600';
     }
   };
 
@@ -231,9 +231,9 @@ const AVLVisualizer = () => {
   /* ---------- helper: balance factor colour ---------- */
 
   const bfColor = (bf) => {
-    if (bf === 0) return '#94a3b8';        // slate
-    if (bf === 1 || bf === -1) return '#60a5fa';  // blue
-    return '#f87171';                       // red – imbalanced
+    if (bf === 0) return '#64748b';        // slate-500
+    if (bf === 1 || bf === -1) return '#2563eb';  // blue-600
+    return '#dc2626';                       // red-600 – imbalanced
   };
 
   /* ---------- render ---------- */
@@ -241,7 +241,7 @@ const AVLVisualizer = () => {
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-t-lg shadow-lg flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold">AVL Tree Operations</h2>
           <p className="text-xs opacity-90 mt-0.5">
@@ -259,7 +259,7 @@ const AVLVisualizer = () => {
       </div>
 
       {/* Controls */}
-      <div className="bg-gray-800 p-4 flex flex-wrap items-center gap-3">
+      <div className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 flex flex-wrap items-center gap-3">
         {/* Value input */}
         <input
           type="number"
@@ -270,7 +270,7 @@ const AVLVisualizer = () => {
           onKeyDown={handleKeyDown}
           placeholder="Value (1–999)"
           disabled={isRunning}
-          className="w-32 px-3 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:border-violet-400 focus:outline-none text-sm placeholder-gray-400 disabled:opacity-50"
+          className="w-32 px-3 py-2 bg-white dark:bg-slate-700 text-slate-800 dark:text-white rounded-lg border border-slate-200 dark:border-slate-600 shadow-sm focus:border-blue-400 focus:outline-none text-sm placeholder-slate-400 disabled:opacity-50"
         />
 
         {/* Operation buttons */}
@@ -301,7 +301,7 @@ const AVLVisualizer = () => {
           Delete
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={handleRandomTree}
@@ -321,12 +321,12 @@ const AVLVisualizer = () => {
           Reset
         </button>
 
-        <div className="h-6 w-px bg-gray-600 mx-1" />
+        <div className="h-6 w-px bg-slate-200 mx-1" />
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showSettings ? 'bg-purple-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showSettings ? 'bg-blue-100 dark:bg-blue-900/40 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
           }`}
         >
           <Settings size={16} />
@@ -335,8 +335,8 @@ const AVLVisualizer = () => {
 
         <button
           onClick={() => setShowStats(!showStats)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showStats ? 'bg-cyan-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showStats ? 'bg-blue-100 dark:bg-blue-900/40 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
           }`}
         >
           <BarChart3 size={16} />
@@ -345,8 +345,8 @@ const AVLVisualizer = () => {
 
         <button
           onClick={() => setShowExplanation(!showExplanation)}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm ${
-            showExplanation ? 'bg-indigo-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-semibold transition-colors text-sm border shadow-sm ${
+            showExplanation ? 'bg-blue-100 dark:bg-blue-900/40 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300'
           }`}
         >
           <MessageSquare size={16} />
@@ -356,15 +356,15 @@ const AVLVisualizer = () => {
 
       {/* Speed settings */}
       {showSettings && (
-        <div className="bg-gray-700 p-3 flex items-center gap-3">
-          <span className="text-white text-sm font-semibold">Animation Speed</span>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3 flex items-center gap-3 border-b border-slate-200 dark:border-slate-700">
+          <span className="text-slate-700 dark:text-slate-200 text-sm font-semibold">Animation Speed</span>
           <div className="flex gap-2">
             {Object.entries(SPEED_PRESETS).map(([name, value]) => (
               <button
                 key={name}
                 onClick={() => setSpeed(value)}
-                className={`px-3 py-1 rounded text-sm ${
-                  speed === value ? 'bg-blue-500 text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                className={`px-3 py-1 rounded border text-sm transition-colors ${
+                  speed === value ? 'bg-blue-600 text-white shadow-sm border-blue-600' : 'bg-white dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                 }`}
               >
                 {name.replace('_', ' ')}
@@ -376,22 +376,22 @@ const AVLVisualizer = () => {
 
       {/* Stats bar */}
       {showStats && (
-        <div className="bg-gray-800/80 border-t border-gray-700 px-5 py-2 flex flex-wrap gap-5 text-sm">
+        <div className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-5 py-2 flex flex-wrap gap-5 text-sm">
           <div className="flex items-center gap-2">
-            <span className="text-gray-400">Nodes:</span>
-            <span className="text-white font-bold">{stats.nodeCount}</span>
+            <span className="text-slate-500 dark:text-slate-400">Nodes:</span>
+            <span className="text-slate-700 dark:text-slate-200 font-bold">{stats.nodeCount}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400">Height:</span>
-            <span className="text-white font-bold">{stats.height}</span>
+            <span className="text-slate-500 dark:text-slate-400">Height:</span>
+            <span className="text-slate-700 dark:text-slate-200 font-bold">{stats.height}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400">Min:</span>
-            <span className="text-emerald-400 font-bold">{stats.min}</span>
+            <span className="text-slate-500 dark:text-slate-400">Min:</span>
+            <span className="text-emerald-600 font-bold">{stats.min}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-gray-400">Max:</span>
-            <span className="text-rose-400 font-bold">{stats.max}</span>
+            <span className="text-slate-500 dark:text-slate-400">Max:</span>
+            <span className="text-rose-600 font-bold">{stats.max}</span>
           </div>
         </div>
       )}
@@ -399,9 +399,12 @@ const AVLVisualizer = () => {
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
         {/* SVG Tree */}
-        <div className="flex-1 bg-gray-950 flex items-center justify-center p-2 overflow-hidden relative">
+        <div 
+          className="flex-1 flex items-center justify-center p-2 overflow-hidden relative dark:bg-slate-900"
+          style={{ backgroundColor: '#f8fafc', backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+        >
           {treeData.nodes.length === 0 ? (
-            <div className="text-gray-500 text-lg font-medium select-none">
+            <div className="text-slate-500 dark:text-slate-400 text-lg font-medium select-none">
               Enter a value and click <span className="text-violet-400">Insert</span> or press{' '}
               <span className="text-violet-400">Random Tree</span>
             </div>
@@ -413,8 +416,8 @@ const AVLVisualizer = () => {
                 </filter>
                 {/* Gradients */}
                 <radialGradient id="avl-grad-default" cx="35%" cy="30%" r="65%">
-                  <stop offset="0%" stopColor="#818cf8" />
-                  <stop offset="100%" stopColor="#4f46e5" />
+                  <stop offset="0%" stopColor="#60a5fa" />
+                  <stop offset="100%" stopColor="#2563eb" />
                 </radialGradient>
                 <radialGradient id="avl-grad-visited" cx="35%" cy="30%" r="65%">
                   <stop offset="0%" stopColor="#34d399" />
@@ -450,7 +453,7 @@ const AVLVisualizer = () => {
                     y1={edge.from.y}
                     x2={edge.to.x}
                     y2={edge.to.y}
-                    stroke={isRotating ? '#fb923c' : fromActive && toActive ? '#fbbf24' : '#64748b'}
+                    stroke={isRotating ? '#fb923c' : fromActive && toActive ? '#fbbf24' : '#cbd5e1'}
                     strokeWidth={isRotating ? 5 : fromActive && toActive ? 4 : 3}
                     strokeLinecap="round"
                     className="transition-all duration-300"
@@ -521,7 +524,7 @@ const AVLVisualizer = () => {
                       x={node.x + 30}
                       y={node.y - 30}
                       textAnchor="middle"
-                      fill="#93c5fd"
+                      fill="#3b82f6"
                       fontSize="11"
                       fontWeight="700"
                       fontFamily="monospace"
@@ -550,20 +553,20 @@ const AVLVisualizer = () => {
 
         {/* Log Panel */}
         {showExplanation && (
-          <div className="w-80 bg-gray-900 border-l border-gray-700 flex flex-col">
-            <div className="px-4 py-3 bg-gray-800 border-b border-gray-700 flex items-center gap-2">
-              <MessageSquare size={16} className="text-violet-400" />
-              <span className="text-white font-semibold text-sm">Algorithm Log</span>
+          <div className="w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700 flex flex-col">
+            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center gap-2">
+              <MessageSquare size={16} className="text-blue-500" />
+              <span className="text-slate-800 dark:text-slate-100 font-semibold text-sm">Algorithm Log</span>
               <button
                 onClick={() => setLogs([])}
-                className="ml-auto text-xs text-gray-400 hover:text-white transition-colors"
+                className="ml-auto text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors"
               >
                 Clear
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-3 space-y-1.5 text-xs font-mono">
               {logs.length === 0 && (
-                <p className="text-gray-500 text-center mt-6">
+                <p className="text-slate-500 dark:text-slate-400 text-center mt-6">
                   Perform an operation to see step‑by‑step logs here.
                 </p>
               )}
@@ -580,26 +583,26 @@ const AVLVisualizer = () => {
       </div>
 
       {/* Legend */}
-      <div className="bg-gray-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg">
+      <div className="bg-slate-50 dark:bg-slate-800 p-3 flex flex-wrap gap-4 justify-center text-sm rounded-b-lg border-t border-slate-200 dark:border-slate-700">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#6366f1' }} />
-          <span className="text-white">Unvisited</span>
+          <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3b82f6' }} />
+          <span className="text-slate-600 dark:text-slate-300">Unvisited</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#f59e0b' }} />
-          <span className="text-white">Visiting</span>
+          <span className="text-slate-600 dark:text-slate-300">Visiting</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10b981' }} />
-          <span className="text-white">Visited / Found</span>
+          <span className="text-slate-600 dark:text-slate-300">Visited / Found</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#ea580c' }} />
-          <span className="text-white">Rotating</span>
+          <span className="text-slate-600 dark:text-slate-300">Rotating</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded" style={{ backgroundColor: '#ef4444' }} />
-          <span className="text-white">Deleting</span>
+          <span className="text-slate-600 dark:text-slate-300">Deleting</span>
         </div>
       </div>
     </div>
