@@ -144,40 +144,6 @@ AlgorithmVisualizer
 
 ---
 
-# Installation
-
-Clone the repository
-
-```bash
-git clone https://github.com/manishkumar8312/AlgorithmVizualizer.git
-```
-
-Navigate to the project
-
-```bash
-cd AlgorithmVizualizer
-```
-
-Install dependencies
-
-```bash
-npm install
-```
-
-Run the development server
-
-```bash
-npm run dev
-```
-
-Build for production
-
-```bash
-npm run build
-```
-
----
-
 # Roadmap
 
 - AVL Tree Visualization
