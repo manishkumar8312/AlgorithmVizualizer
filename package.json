@@ -4,6 +4,7 @@
   "description": "Interactive Algorithm Visualizer with beautiful UI",
   "private": true,
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "framer-motion": "^12.23.24",
     "lucide-react": "^1.17.0",
     "prismjs": "^1.30.0",

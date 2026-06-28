@@ -116,10 +116,10 @@ const Home = () => {
                 Explore Algorithms
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <button className="flex items-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-medium px-6 py-3 rounded-xl shadow-sm transition-all">
+              <Link to="/playground" className="flex items-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-medium px-6 py-3 rounded-xl shadow-sm transition-all hover:shadow-lg hover:-translate-y-0.5">
                 Try Playground
                 <Code2 className="w-4 h-4 text-slate-400" />
-              </button>
+              </Link>
             </div>
 
             <div className="flex flex-wrap items-center gap-6 text-[13px] font-medium text-slate-500 dark:text-slate-400">

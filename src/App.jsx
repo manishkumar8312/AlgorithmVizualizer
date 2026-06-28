@@ -9,6 +9,7 @@ import PathFindingPage from './pages/PathFindingPage';
 import GraphPage from './pages/GraphPage';
 import TreeAlgorithms from './pages/TreeAlgorithms';
 import RecursionAlgorithms from './pages/RecursionAlgorithms';
+import PlaygroundPage from './pages/PlaygroundPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/graph" element={<GraphPage />} />
           <Route path="/recursion" element={<RecursionAlgorithms />} />
           <Route path="/trees" element={<TreeAlgorithms />} />
+          <Route path="/playground" element={<PlaygroundPage />} />
         </Routes>
       </Router>
     </ThemeProvider>

@@ -103,7 +103,7 @@ const Navbar = () => {
             </div>
 
             <Link to="/algorithms" className="hover:text-slate-900 dark:hover:text-white transition-colors">Categories</Link>
-            <Link to="/" className="hover:text-slate-900 dark:hover:text-white transition-colors">Playground</Link>
+            <Link to="/playground" className="hover:text-slate-900 dark:hover:text-white transition-colors">Playground</Link>
             <a
               href="https://github.com/manishkumar8312/CS-Fundamentals"
               target="_blank"
