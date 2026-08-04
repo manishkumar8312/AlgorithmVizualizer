@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Play, RotateCcw, Search, Shuffle, Settings, BookOpen, Code2, FileText } from 'lucide-react';
 import { generateSortedArray, SPEED_PRESETS, COLORS } from '../utils/animationHelpers';
+import ExplanationPanel from './educational/ExplanationPanel';
+import CodeViewer from './educational/CodeViewer';
+import CustomTestCases from './educational/CustomTestCases';
+import { algorithmDatabase } from '../data/algorithmData';
 
 const SearchingVisualizer = ({ algorithm, algorithmInfo }) => {
   const [array, setArray] = useState([]);
@@ -12,6 +16,10 @@ const SearchingVisualizer = ({ algorithm, algorithmInfo }) => {
   const [arraySize, setArraySize] = useState(30);
   const [speed, setSpeed] = useState(SPEED_PRESETS.MEDIUM);
   const [searchResult, setSearchResult] = useState(null);
+
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [showCodeViewer, setShowCodeViewer] = useState(false);
+  const [showCustomTest, setShowCustomTest] = useState(false);
 
   useEffect(() => {
     resetArray();
@@ -120,6 +128,39 @@ const SearchingVisualizer = ({ algorithm, algorithmInfo }) => {
           New Array
         </button>
 
+        <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
+
+        {/* Educational Tools */}
+        <button
+          onClick={() => setShowExplanation(!showExplanation)}
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
+            showExplanation ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-transparent'
+          }`}
+        >
+          <BookOpen className="w-4 h-4 opacity-80" />
+          Info
+        </button>
+
+        <button
+          onClick={() => setShowCodeViewer(!showCodeViewer)}
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
+            showCodeViewer ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-transparent'
+          }`}
+        >
+          <Code2 className="w-4 h-4 opacity-80" />
+          Code
+        </button>
+
+        <button
+          onClick={() => setShowCustomTest(!showCustomTest)}
+          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all ${
+            showCustomTest ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-transparent'
+          }`}
+        >
+          <FileText className="w-4 h-4 opacity-80" />
+          Test
+        </button>
+
         <div className="ml-auto flex items-center gap-3 text-slate-700 dark:text-slate-200 text-[13px] font-medium">
           <div className="flex flex-col mr-2">
             <label className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mb-1">Array Size</label>
@@ -189,6 +230,38 @@ const SearchingVisualizer = ({ algorithm, algorithmInfo }) => {
           <span>Found</span>
         </div>
       </div>
+
+      {/* Educational Modals/Overlays */}
+      <ExplanationPanel
+        algorithmInfo={algorithmDatabase.searching[algorithmInfo.name === 'Binary Search' ? 'binarySearch' : 'linearSearch'] || algorithmInfo}
+        isOpen={showExplanation}
+        onClose={() => setShowExplanation(false)}
+      />
+
+      {showCodeViewer && (
+        <div className="fixed bottom-0 right-0 h-3/4 w-[500px] bg-white dark:bg-slate-900 border-t border-l border-slate-200 dark:border-slate-700 z-50 shadow-2xl rounded-tl-2xl overflow-hidden">
+          <CodeViewer
+            codeSnippets={algorithmDatabase.searching[algorithmInfo.name === 'Binary Search' ? 'binarySearch' : 'linearSearch']?.codeSnippets}
+            isOpen={showCodeViewer}
+            onClose={() => setShowCodeViewer(false)}
+          />
+        </div>
+      )}
+
+      {showCustomTest && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 z-40 max-h-96 overflow-y-auto shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+          <CustomTestCases
+            onApplyTest={(customArr) => {
+              const sorted = [...customArr].sort((a, b) => a - b);
+              setArray(sorted);
+              if (!sorted.includes(target)) setTarget(sorted[0] || 0);
+              setShowCustomTest(false);
+            }}
+            isOpen={showCustomTest}
+            onClose={() => setShowCustomTest(false)}
+          />
+        </div>
+      )}
     </div>
   );
 };
