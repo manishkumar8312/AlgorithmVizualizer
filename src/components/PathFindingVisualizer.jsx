@@ -5,6 +5,32 @@ import { getNodesInShortestPathOrder } from '../algorithms/pathfinding/dijkstra'
 
 // ─── Synchronous algorithm runners (no delays) ────────────────────────────────
 
+function runAstarSync(grid, startNode, endNode) {
+  const visited = [];
+  startNode.distance = 0;
+  startNode.fDistance = Math.abs(startNode.row - endNode.row) + Math.abs(startNode.col - endNode.col);
+  const openSet = [startNode];
+  while (openSet.length) {
+    openSet.sort((a, b) => (a.fDistance || Infinity) - (b.fDistance || Infinity));
+    const curr = openSet.shift();
+    if (curr.isWall) continue;
+    if (curr.distance === Infinity) return visited;
+    curr.isVisited = true;
+    visited.push(curr);
+    if (curr === endNode) return visited;
+    for (const nb of getNeighbors(curr, grid)) {
+      const g = curr.distance + 1;
+      if (g < nb.distance) {
+        nb.distance = g;
+        nb.fDistance = g + Math.abs(nb.row - endNode.row) + Math.abs(nb.col - endNode.col);
+        nb.previousNode = curr;
+        if (!openSet.includes(nb)) openSet.push(nb);
+      }
+    }
+  }
+  return visited;
+}
+
 function runDijkstraSync(grid, startNode, endNode) {
   const visited = [];
   startNode.distance = 0;
@@ -82,16 +108,18 @@ function deepCloneGrid(grid) {
 }
 
 function computeInstant(algorithmKey, grid, startRow, startCol, endRow, endCol) {
-  const g = deepCloneGrid(grid);
+  const g = grid.map(row => row.map(node => ({ ...node, isVisited: false, isPath: false, distance: Infinity, previousNode: null })));
   const s = g[startRow][startCol];
   const e = g[endRow][endCol];
-  s.isStart = true; e.isEnd = true;
+  s.isStart = true;
+  e.isEnd = true;
   let runner;
-  if (algorithmKey === 'bfs') runner = runBfsSync;
+  if (algorithmKey === 'astar') runner = runAstarSync;
+  else if (algorithmKey === 'bfs') runner = runBfsSync;
   else if (algorithmKey === 'dfs') runner = runDfsSync;
   else runner = runDijkstraSync;
+
   runner(g, s, e);
-  // Mark path
   let cur = e;
   while (cur && cur.previousNode) {
     cur.isPath = true;
@@ -117,7 +145,8 @@ const PathFindingVisualizer = ({ algorithm, algorithmInfo }) => {
   const [speed, setSpeed] = useState(SPEED_PRESETS.FAST);
   const [stats, setStats] = useState(null);
   const animationRef = useRef(null);
-  const algorithmKey = algorithmInfo?.name?.toLowerCase().includes('bfs') ? 'bfs'
+  const algorithmKey = algorithmInfo?.name?.toLowerCase().includes('a*') ? 'astar'
+    : algorithmInfo?.name?.toLowerCase().includes('bfs') ? 'bfs'
     : algorithmInfo?.name?.toLowerCase().includes('dfs') ? 'dfs' : 'dijkstra';
 
   // Build fresh base grid (walls only, no path/visited)
@@ -196,7 +225,29 @@ const PathFindingVisualizer = ({ algorithm, algorithmInfo }) => {
 
     const visitedOrder = [];
     // Collect with wrapper
-    if (algorithmKey === 'dijkstra') {
+    if (algorithmKey === 'astar') {
+      s2.distance = 0;
+      s2.fDistance = Math.abs(s2.row - e2.row) + Math.abs(s2.col - e2.col);
+      const openSet = [s2];
+      while (openSet.length) {
+        openSet.sort((a, b) => (a.fDistance || Infinity) - (b.fDistance || Infinity));
+        const curr = openSet.shift();
+        if (curr.isWall) continue;
+        if (curr.distance === Infinity) break;
+        curr.isVisited = true;
+        visitedOrder.push(curr);
+        if (curr === e2) break;
+        for (const nb of getNeighbors(curr, gForAnim)) {
+          const g = curr.distance + 1;
+          if (g < nb.distance) {
+            nb.distance = g;
+            nb.fDistance = g + Math.abs(nb.row - e2.row) + Math.abs(nb.col - e2.col);
+            nb.previousNode = curr;
+            if (!openSet.includes(nb)) openSet.push(nb);
+          }
+        }
+      }
+    } else if (algorithmKey === 'dijkstra') {
       s2.distance = 0;
       const unvisited = getAllNodes(gForAnim);
       while (unvisited.length) {

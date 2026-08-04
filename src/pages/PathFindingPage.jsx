@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import PathFindingVisualizer from '../components/PathFindingVisualizer';
+import { astar, astarInfo } from '../algorithms/pathfinding/astar';
 import { dijkstra, dijkstraInfo } from '../algorithms/pathfinding/dijkstra';
 import { bfs, bfsInfo } from '../algorithms/pathfinding/bfs';
 import { dfs, dfsInfo } from '../algorithms/pathfinding/dfs';
 
 const PathFindingPage = () => {
   const algorithms = [
+    { name: 'A* Search', algorithm: astar, info: astarInfo },
     { name: "Dijkstra's Algorithm", algorithm: dijkstra, info: dijkstraInfo },
     { name: 'Breadth-First Search', algorithm: bfs, info: bfsInfo },
     { name: 'Depth-First Search', algorithm: dfs, info: dfsInfo },
