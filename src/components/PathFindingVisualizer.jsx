@@ -118,17 +118,15 @@ function computeInstant(algorithmKey, grid, startRow, startCol, endRow, endCol) 
   else if (algorithmKey === 'bfs') runner = runBfsSync;
   else if (algorithmKey === 'dfs') runner = runDfsSync;
   else runner = runDijkstraSync;
-  const startTime = performance.now();
-  const visitedNodes = runner(g, s, e);
-  const endTime = performance.now();
-  const pathNodes = getNodesInShortestPathOrder(e);
-  const found = e.isVisited;
-  return {
-    visitedCount: visitedNodes.length,
-    pathCount: found ? pathNodes.length : 0,
-    timeMs: Math.round((endTime - startTime) * 100) / 100,
-    found,
-  };
+
+  runner(g, s, e);
+  let cur = e;
+  while (cur && cur.previousNode) {
+    cur.isPath = true;
+    cur = cur.previousNode;
+  }
+  if (s) s.isPath = true;
+  return g;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
