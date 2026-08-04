@@ -851,5 +851,85 @@ function quickSort(arr, low = 0, high = arr.length - 1) {
         javascript: `function levelOrder(root) {\n    if (!root) return;\n    const queue = [root];\n    while (queue.length > 0) {\n        const node = queue.shift();\n        console.log(node.val);\n        if (node.left) queue.push(node.left);\n        if (node.right) queue.push(node.right);\n    }\n}`
       }
     }
+  },
+  pathfinding: {
+    astar: {
+      name: "A* Search Algorithm",
+      description: "A* Search is an informed search algorithm that uses heuristic functions to find the shortest path between start and goal nodes efficiently.",
+      purpose: "To find the shortest path faster than Dijkstra by guiding the search towards the target using heuristics.",
+      workingPrinciple: "A* calculates f(n) = g(n) + h(n) for each node, where g(n) is the cost from start and h(n) is the estimated cost to target (Manhattan distance). It expands nodes with the smallest f(n) first.",
+      bestCase: "O(1)",
+      averageCase: "O(E)",
+      worstCase: "O(b^d)",
+      spaceComplexity: "O(V)",
+      applications: [
+        "Video game pathing (NPC navigation)",
+        "GPS navigation & mapping services",
+        "Robotic motion planning"
+      ],
+      advantages: [
+        "Optimal and complete (finds shortest path if admissible heuristic is used)",
+        "Dramatically faster than Dijkstra on spatial grids"
+      ],
+      disadvantages: [
+        "Memory intensive as it keeps all generated nodes in memory"
+      ],
+      pseudocode: [
+        "openSet = {startNode}",
+        "while openSet is not empty:",
+        "  current = node in openSet with lowest fScore",
+        "  if current == goal: return reconstruct_path(current)",
+        "  openSet.remove(current)",
+        "  for neighbor of current:",
+        "    tentative_g = gScore[current] + weight(current, neighbor)",
+        "    if tentative_g < gScore[neighbor]:",
+        "      cameFrom[neighbor] = current",
+        "      gScore[neighbor] = tentative_g",
+        "      fScore[neighbor] = gScore[neighbor] + h(neighbor, goal)",
+        "      if neighbor not in openSet: openSet.add(neighbor)"
+      ],
+      codeSnippets: {
+        cpp: `struct Node { int r, c, g, h; int f() const { return g + h; } };
+int astar(Node start, Node goal) {
+    priority_queue<Node> openSet;
+    openSet.push(start);
+    while(!openSet.empty()) {
+        Node curr = openSet.top(); openSet.pop();
+        if(curr.r == goal.r && curr.c == goal.c) return curr.g;
+        // Expand 4-directional neighbors...
+    }
+    return -1;
+}`,
+        java: `public int astar(Node start, Node goal) {
+    PriorityQueue<Node> openSet = new PriorityQueue<>((a, b) -> a.f() - b.f());
+    openSet.add(start);
+    while (!openSet.isEmpty()) {
+        Node curr = openSet.poll();
+        if (curr.r == goal.r && curr.c == goal.c) return curr.g;
+        // Expand neighbors...
+    }
+    return -1;
+}`,
+        python: `import heapq
+def astar(start, goal):
+    open_set = []
+    heapq.heappush(open_set, (0 + h(start, goal), 0, start))
+    while open_set:
+        f, g, curr = heapq.heappop(open_set)
+        if curr == goal: return g
+        # Expand neighbors...
+    return -1`,
+        javascript: `function astar(start, goal) {
+    const openSet = [start];
+    while (openSet.length) {
+        openSet.sort((a, b) => a.f - b.f);
+        const curr = openSet.shift();
+        if (curr === goal) return curr.g;
+        // Expand neighbors...
+    }
+    return -1;
+}`
+      }
+    }
   }
 };
