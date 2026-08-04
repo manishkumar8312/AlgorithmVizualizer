@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, ArrowRight, Plus, Trash2, HelpCircle, Shuffle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Pause, RotateCcw, ArrowRight, Plus, Trash2, HelpCircle, Shuffle, ChevronLeft, ChevronRight, Edit3 } from 'lucide-react';
 import { COLORS } from '../utils/animationHelpers';
 import * as GraphAlgos from '../utils/GraphAlgorithms';
+import InteractiveGraphBuilder from './educational/InteractiveGraphBuilder';
 
 // Algorithm details including description, complexity, etc.
 const ALGORITHM_DETAILS = {
@@ -105,6 +106,7 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(300); // ms per step
+  const [showGraphBuilder, setShowGraphBuilder] = useState(false);
 
   // Editor states
   const [selectedNodeId, setSelectedNodeId] = useState(null);
@@ -468,6 +470,18 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
           >
             <Shuffle size={16} className="text-slate-500" />
             Randomize
+          </button>
+
+          <button
+            onClick={() => setShowGraphBuilder(!showGraphBuilder)}
+            className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all shadow-sm border ${
+              showGraphBuilder
+                ? 'bg-purple-100 border-purple-200 text-purple-700 dark:bg-purple-900/40 dark:border-purple-700 dark:text-purple-300'
+                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
+            }`}
+          >
+            <Edit3 size={16} className="text-purple-500" />
+            Graph Builder
           </button>
         </div>
 
@@ -942,6 +956,27 @@ const GraphVisualizer = ({ algorithm: legacyAlgo, algorithmInfo }) => {
           </div>
         )}
       </div>
+
+      {showGraphBuilder && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl relative">
+            <button
+              onClick={() => setShowGraphBuilder(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white z-50 text-xl font-bold px-3 py-1"
+            >
+              ✕
+            </button>
+            <InteractiveGraphBuilder
+              isOpen={showGraphBuilder}
+              onGraphChange={(newGraph) => {
+                if (newGraph && newGraph.vertices) setVertices(newGraph.vertices);
+                if (newGraph && newGraph.edges) setEdges(newGraph.edges);
+                setShowGraphBuilder(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

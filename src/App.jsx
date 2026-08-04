@@ -11,6 +11,7 @@ const GraphPage = lazy(() => import('./pages/GraphPage'));
 const TreeAlgorithms = lazy(() => import('./pages/TreeAlgorithms'));
 const RecursionAlgorithms = lazy(() => import('./pages/RecursionAlgorithms'));
 const PlaygroundPage = lazy(() => import('./pages/PlaygroundPage'));
+const DPPage = lazy(() => import('./pages/DPPage'));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-900">
@@ -35,6 +36,7 @@ function App() {
             <Route path="/graph" element={<GraphPage />} />
             <Route path="/recursion" element={<RecursionAlgorithms />} />
             <Route path="/trees" element={<TreeAlgorithms />} />
+            <Route path="/dp" element={<DPPage />} />
             <Route path="/playground" element={<PlaygroundPage />} />
           </Routes>
         </Suspense>
